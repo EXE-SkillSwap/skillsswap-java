@@ -36,7 +36,7 @@ jobs:
         username: ${{ secrets.VPS_USER }}
         key: ${{ secrets.VPS_KEY }}
         source: "."
-        target: "/home/${{ secrets.VPS_USER }}/springboot-app"
+        target: "/home/${{ secrets.VPS_USER }}/skillswap"
 
     - name: Deploy on VPS via SSH
       uses: appleboy/ssh-action@v1.0.0
