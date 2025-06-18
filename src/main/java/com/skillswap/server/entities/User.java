@@ -10,7 +10,9 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -36,6 +38,11 @@ public class User {
     private String bio;
     private String location;
     private String phoneNumber;
+    private int age;
+    private String gender;
+    private String profession;
+    private String education;
+    private LocalDate birthday;
     private boolean isFirstLogin = true;
     private boolean isActive = true;
     @Column(columnDefinition = "LONGTEXT")
@@ -44,4 +51,7 @@ public class User {
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProfileImages> profileImages;
 }

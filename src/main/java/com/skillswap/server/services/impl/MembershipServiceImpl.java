@@ -18,6 +18,7 @@ import com.skillswap.server.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import vn.payos.PayOS;
 import vn.payos.type.CheckoutResponseData;
@@ -170,4 +171,17 @@ public class MembershipServiceImpl implements MembershipService {
             .orElse(null);
         return membershipSubscriptionMapper.toMembershipSubscriptionDTO(subscription);
     }
+
+    @Scheduled(fixedRate = 60000 * 60 * 24)
+    private void checkMembershipSubscription(){
+        List<MembershipSubscription> activeSubscriptions = membershipSubscriptionRepository.findByStatus(MembershipSubscriptionStatus.ACTIVE);
+        LocalDateTime now = LocalDateTime.now();
+        for(MembershipSubscription subscription : activeSubscriptions){
+            if(subscription.getEndDate().isAfter(now)){
+                subscription.setStatus(MembershipSubscriptionStatus.EXPIRED);
+                membershipSubscriptionRepository.save(subscription);
+            }
+        }
+    }
+
 }

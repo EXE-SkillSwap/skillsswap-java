@@ -1,16 +1,16 @@
 package com.skillswap.server.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+import java.time.LocalDate;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class CreateUserRequest {
 
     @NotBlank(message = "Tên là bắt buộc")
@@ -23,5 +23,9 @@ public class CreateUserRequest {
     String password;
     @NotBlank(message = "Xác nhận mật khẩu là bắt buộc")
     String confirmPassword;
+    @NotBlank(message = "Tuổi là bắt buộc")
+    String birthDay;
+    @NotBlank(message = "Giới tính là bắt buộc")
+    String gender;
 
 }

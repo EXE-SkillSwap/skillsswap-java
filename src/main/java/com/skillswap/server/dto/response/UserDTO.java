@@ -12,6 +12,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -31,4 +32,11 @@ public class UserDTO {
     private String phoneNumber;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private String skillTags;
+    private String profession;
+    private String education;
+    private int age;
+    private String gender;
+    private String birthday;
+    private List<ProfileImageDTO> profileImages;
 }
