@@ -17,7 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -32,14 +31,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO registerUser(CreateUserRequest request) {
-        if(!request.getPassword().equals(request.getConfirmPassword())){
+        if (!request.getPassword().equals(request.getConfirmPassword())) {
             throw new RuntimeException("Mật khẩu và xác nhận mật khẩu không khớp");
         }
 
-        if(userRepository.findByEmail(request.getEmail()).isPresent()){
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new RuntimeException("Email đã được sử dụng");
         }
-        if(LocalDate.now().getYear() - LocalDate.parse(request.getBirthDay()).getYear() < 18){
+        if (LocalDate.now().getYear() - LocalDate.parse(request.getBirthDay()).getYear() < 18) {
             throw new RuntimeException("Bạn phải từ 18 tuổi trở lên để đăng ký");
         }
         User user = new User();
@@ -62,7 +61,7 @@ public class UserServiceImpl implements UserService {
     public User getAuthenticatedUser() {
         var authenticatedUserId = SecurityContextHolder.getContext().getAuthentication().getName();
         return userRepository.findById(Integer.parseInt(authenticatedUserId)).orElseThrow(() ->
-            new RuntimeException("Người dùng không tồn tại hoặc không được xác thực"));
+                new RuntimeException("Người dùng không tồn tại hoặc không được xác thực"));
     }
 
     @Override
@@ -96,6 +95,20 @@ public class UserServiceImpl implements UserService {
                 case "avatarUrl":
                     user.setAvatarUrl((String) value);
                     break;
+                case "gender":
+                    user.setGender((String) value);
+                    break;
+                case "birthDay":
+                    user.setBirthday(LocalDate.parse((String) value));
+                    user.setAge(LocalDate.now().getYear() - LocalDate.parse((String) value).getYear());
+                    break;
+                case "profession":
+                    user.setProfession((String) value);
+                    break;
+                case "education":
+                    user.setEducation((String) value);
+                    break;
+
                 // Add more fields as needed
             }
         });
@@ -106,7 +119,7 @@ public class UserServiceImpl implements UserService {
     public Page<UserDTO> getAllUsers(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         User authenticatedUser = getAuthenticatedUser();
-        Page<User> users = userRepository.findAllByRoleAndIdNot(Role.USER,authenticatedUser.getId(), pageable);
+        Page<User> users = userRepository.findAllByRoleAndIdNot(Role.USER, authenticatedUser.getId(), pageable);
         return users.map(userMapper::userDTO);
     }
 }

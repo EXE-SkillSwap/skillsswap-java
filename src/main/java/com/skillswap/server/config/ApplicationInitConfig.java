@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,6 +64,10 @@ public class ApplicationInitConfig {
                 user.setBio("Default User of SkillSwap platform");
                 user.setLocation("User House");
                 user.setAvatarUrl(defaultAvt);
+                user.setGender("Nam");
+                user.setBirthday(LocalDate.parse("2000-01-01"));
+                user.setEducation("Đại học FPT");
+                user.setProfession("Sinh viên");
                 userRepository.save(user);
                 log.info("Default user initialized with username: user, password: user");
             }
@@ -110,7 +115,13 @@ public class ApplicationInitConfig {
                         "German Language",
                         "Chinese Language",
                         "Japanese Language",
-                        "Korean Language"
+                        "Korean Language",
+                        "Communication Skills",
+                        "Leadership Skills",
+                        "Teamwork Skills",
+                        "Problem Solving Skills",
+                        "Critical Thinking Skills",
+                        "Time Management Skills"
                 );
                 List<Skills> skills = defaultSkills.stream().map(Skills::new).collect(Collectors.toList());
                 skillsRepository.saveAll(skills);
