@@ -13,6 +13,6 @@ public class TestController {
 
     @GetMapping
     public String test() {
-        return "Test successful! Fix loi 5";
+        return "Test successful! Fix loi 6";
     }
 }
