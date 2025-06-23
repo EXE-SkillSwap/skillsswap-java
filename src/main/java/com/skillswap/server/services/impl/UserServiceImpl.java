@@ -122,4 +122,9 @@ public class UserServiceImpl implements UserService {
         Page<User> users = userRepository.findAllByRoleAndIdNot(Role.USER, authenticatedUser.getId(), pageable);
         return users.map(userMapper::userDTO);
     }
+
+    @Override
+    public Page<UserDTO> getAllUsersForAdmin(int page, int size) {
+        return null;
+    }
 }

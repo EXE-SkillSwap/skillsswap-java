@@ -3,6 +3,7 @@ package com.skillswap.server.controller;
 import com.skillswap.server.dto.request.PaymentProcessRequest;
 import com.skillswap.server.dto.response.MembershipDTO;
 import com.skillswap.server.dto.response.PaymentDTO;
+import com.skillswap.server.entities.Membership;
 import com.skillswap.server.services.MembershipService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -30,6 +31,15 @@ public class MembershipController {
     @PostMapping
     public ResponseEntity<MembershipDTO> createMembership(@Valid @RequestBody MembershipDTO dto){
         return new ResponseEntity<>(membershipService.createMembership(dto), HttpStatus.CREATED);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(summary = "Get all memberships for admin",
+               description = "This endpoint retrieves all memberships. Only ADMIN can access this endpoint.")
+    @GetMapping("/admin")
+    public ResponseEntity<List<Membership>> getAllMembershipsForAdmin() {
+        return new ResponseEntity<>(membershipService.getAllMembershipsForAdmin(), HttpStatus.OK);
     }
 
     @Operation(summary = "Get all memberships",

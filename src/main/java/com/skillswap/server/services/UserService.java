@@ -19,4 +19,6 @@ public interface UserService {
     UserDTO updateProfile(Map<String, Object> updateRequest);
 
     Page<UserDTO> getAllUsers(int page, int size);
+
+    Page<UserDTO> getAllUsersForAdmin(int page, int size);
 }

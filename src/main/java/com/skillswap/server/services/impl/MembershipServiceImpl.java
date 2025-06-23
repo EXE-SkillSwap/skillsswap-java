@@ -184,4 +184,8 @@ public class MembershipServiceImpl implements MembershipService {
         }
     }
 
+    @Override
+    public List<Membership> getAllMembershipsForAdmin() {
+        return membershipRepository.findAll();
+    }
 }

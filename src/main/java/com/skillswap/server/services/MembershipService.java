@@ -4,6 +4,7 @@ import com.skillswap.server.dto.request.PaymentProcessRequest;
 import com.skillswap.server.dto.response.MembershipDTO;
 import com.skillswap.server.dto.response.MembershipSubscriptionDTO;
 import com.skillswap.server.dto.response.PaymentDTO;
+import com.skillswap.server.entities.Membership;
 import com.skillswap.server.entities.MembershipSubscription;
 
 import java.util.List;
@@ -19,4 +20,5 @@ public interface MembershipService {
     MembershipSubscriptionDTO processPayment(PaymentProcessRequest request);
 
     MembershipSubscriptionDTO getUserMembershipSubscription();
+    List<Membership> getAllMembershipsForAdmin();
 }
