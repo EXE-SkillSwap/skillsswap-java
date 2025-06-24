@@ -46,5 +46,5 @@ jobs:
         key: ${{ secrets.VPS_KEY }}
         script: |
           cd /home/root/skillswap
-          docker-compose down
+          docker-compose down || true
           docker-compose up -d --build
