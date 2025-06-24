@@ -67,7 +67,7 @@ public class SecurityConfig {
 
         http.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(request -> {
             var cors = new CorsConfiguration();
-            cors.setAllowedOrigins(List.of("http://localhost:5173"));
+            cors.setAllowedOrigins(List.of("http://localhost:5173","https://skillsswap-client.pages.dev"));
             cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
             cors.setAllowedHeaders(List.of("*"));
             cors.setAllowCredentials(true);
