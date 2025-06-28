@@ -11,7 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Map;
 
 @RequestMapping("/api/users")
@@ -67,4 +69,18 @@ public class UserController {
                                                  @RequestParam(name = "size", defaultValue = "10") int size) {
         return ResponseEntity.ok(userService.getAllUsersForAdmin(page, size));
     }
+
+    @PostMapping("/upload-profile-images")
+    @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(summary = "Upload profile images")
+    public ResponseEntity<?> uploadProfileImages(@RequestParam("files") MultipartFile[] files) throws IOException {
+        return ResponseEntity.ok(userService.uploadProfileImages(files));
+    }
+
+    @GetMapping("/profile-images/{userId}")
+    @Operation(summary = "Get profile images by user ID")
+    public ResponseEntity<?> getProfileImagesByUserId(@PathVariable int userId) {
+        return ResponseEntity.ok(userService.getProfileImagesByUserId(userId));
+    }
+
 }

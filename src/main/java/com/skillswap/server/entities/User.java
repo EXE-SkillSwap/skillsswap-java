@@ -52,6 +52,7 @@ public class User {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProfileImages> profileImages;
 }

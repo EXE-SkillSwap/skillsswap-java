@@ -1,11 +1,16 @@
 package com.skillswap.server.services.impl;
 
 import com.skillswap.server.dto.request.CreateUserRequest;
+import com.skillswap.server.dto.response.ProfileImageDTO;
 import com.skillswap.server.dto.response.UserDTO;
+import com.skillswap.server.entities.ProfileImages;
 import com.skillswap.server.entities.User;
 import com.skillswap.server.enums.Role;
+import com.skillswap.server.mapper.ProfileImageMapper;
 import com.skillswap.server.mapper.UserMapper;
+import com.skillswap.server.repositories.ProfileImageRepository;
 import com.skillswap.server.repositories.UserRepository;
+import com.skillswap.server.services.CloudinaryService;
 import com.skillswap.server.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,8 +20,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -24,10 +32,13 @@ import java.util.Map;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final ProfileImageRepository profileImageRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
+    private final ProfileImageMapper profileImageMapper;
     @Value("${app.default.avatar}")
     private String defaultAvt;
+    private final CloudinaryService cloudinaryService;
 
     @Override
     public UserDTO registerUser(CreateUserRequest request) {
@@ -126,5 +137,32 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<UserDTO> getAllUsersForAdmin(int page, int size) {
         return null;
+    }
+
+    @Override
+    public String uploadProfileImages(MultipartFile[] files) throws IOException {
+        User authenticatedUser = getAuthenticatedUser();
+        if (files != null && files.length > 0) {
+            ProfileImages profileImages = new ProfileImages();
+            profileImages.setUser(authenticatedUser);
+            for (MultipartFile file : files) {
+                Map map = cloudinaryService.upload(file);
+                String publicId = (String) map.get("public_id");
+                String url = (String) map.get("url");
+                profileImages.setPublicId(publicId);
+                profileImages.setImageUrl(url);
+                authenticatedUser.getProfileImages().add(profileImages);
+                userRepository.save(authenticatedUser);
+
+            }
+        }
+        return "Tải lên ảnh đại diện thành công";
+    }
+
+    @Override
+    public List<ProfileImageDTO> getProfileImagesByUserId(int userId) {
+        List<ProfileImages> images = profileImageRepository.findByUserId(userId);
+        return images.stream().map(profileImageMapper::toProfileImageDTO)
+                .toList();
     }
 }

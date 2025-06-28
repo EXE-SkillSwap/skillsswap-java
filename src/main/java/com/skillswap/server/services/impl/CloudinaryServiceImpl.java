@@ -18,7 +18,12 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 
     @Override
     public Map upload(MultipartFile file) throws IOException {
-        return cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+        Map<String, Object> options = ObjectUtils.asMap(
+                "quality", "100",                // Giữ nguyên chất lượng
+                "fetch_format", "auto",          // Không chuyển định dạng nếu không cần
+                "preserve_original", true        // Giữ ảnh gốc (tùy gói Cloudinary)
+        );
+        return cloudinary.uploader().upload(file.getBytes(), options);
     }
 
     @Override

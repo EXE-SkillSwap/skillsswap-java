@@ -1,10 +1,13 @@
 package com.skillswap.server.services;
 
 import com.skillswap.server.dto.request.CreateUserRequest;
+import com.skillswap.server.dto.response.ProfileImageDTO;
 import com.skillswap.server.dto.response.UserDTO;
 import com.skillswap.server.entities.User;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -21,4 +24,8 @@ public interface UserService {
     Page<UserDTO> getAllUsers(int page, int size);
 
     Page<UserDTO> getAllUsersForAdmin(int page, int size);
+
+    String uploadProfileImages(MultipartFile[] files) throws IOException;
+
+    List<ProfileImageDTO> getProfileImagesByUserId(int userId);
 }

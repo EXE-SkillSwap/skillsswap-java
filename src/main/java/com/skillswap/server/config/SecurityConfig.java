@@ -35,7 +35,8 @@ public class SecurityConfig {
             Map.entry("/api/memberships/payment/**", HttpMethod.POST),
             Map.entry("/api/memberships/my", HttpMethod.GET),
             Map.entry("/api/users/update-profile", HttpMethod.PUT),
-            Map.entry("/api/users/find-friends", HttpMethod.GET)
+            Map.entry("/api/users/find-friends", HttpMethod.GET),
+            Map.entry("/api/users/upload-profile-images", HttpMethod.POST)
     );
 
     @Bean
