@@ -11,6 +11,7 @@ import com.skillswap.server.mapper.UserMapper;
 import com.skillswap.server.repositories.ProfileImageRepository;
 import com.skillswap.server.repositories.UserRepository;
 import com.skillswap.server.services.CloudinaryService;
+import com.skillswap.server.services.EmailService;
 import com.skillswap.server.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,6 +40,7 @@ public class UserServiceImpl implements UserService {
     @Value("${app.default.avatar}")
     private String defaultAvt;
     private final CloudinaryService cloudinaryService;
+    private final EmailService emailService;
 
     @Override
     public UserDTO registerUser(CreateUserRequest request) {
