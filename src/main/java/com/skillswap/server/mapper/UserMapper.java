@@ -39,4 +39,17 @@ public class UserMapper {
 
         return userDTO;
     }
+
+    public UserDTO chatUserDTO(User user) {
+        if (user == null) {
+            return null;
+        }
+
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setFirstName(user.getFirstName());
+        userDTO.setLastName(user.getLastName());
+        userDTO.setAvatarUrl(user.getAvatarUrl());
+        return userDTO;
+    }
 }

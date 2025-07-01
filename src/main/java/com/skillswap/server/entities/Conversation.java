@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "conversations")
@@ -20,5 +21,7 @@ public class Conversation {
     private int id;
     private String title;
     private Date createdAt;
+    @OneToMany(mappedBy = "conversation")
+    private List<Participant> participants;
 
 }

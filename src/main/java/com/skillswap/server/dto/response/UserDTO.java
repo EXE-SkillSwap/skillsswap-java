@@ -1,5 +1,6 @@
 package com.skillswap.server.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.skillswap.server.enums.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
@@ -18,6 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO {
 
     private int id;
