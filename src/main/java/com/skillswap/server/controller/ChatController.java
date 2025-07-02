@@ -33,6 +33,12 @@ public class ChatController {
         );
     }
 
+    @PostMapping("/send-message")
+    public ResponseEntity<?> sendMessage(@RequestBody MessagePayload messagePayload){
+        MessageDTO savedMsg = chatService.sendMessage(messagePayload);
+        return ResponseEntity.ok(savedMsg);
+    }
+
     @Operation(summary = "Create a new chat")
     @SecurityRequirement(name = "Bearer Authentication")
     @PostMapping("/create/new-chat/{userId}")
@@ -40,17 +46,17 @@ public class ChatController {
         return ResponseEntity.ok(chatService.createChat(userId));
     }
 
-    @Operation(summary = "Get all conversations for the current user")
+    @Operation(summary = "Get all conversations for the current user, return type is List<Conversation>")
     @SecurityRequirement(name = "Bearer Authentication")
-    @GetMapping("/current-user/conversations")
-    public ResponseEntity<?> getAllUsersConversedWith() {
-        return ResponseEntity.ok(chatService.getAllUsersConversedWith());
+    @GetMapping("/current/conversations")
+    public ResponseEntity<?> getAllConversationByCurrentUser() {
+        return ResponseEntity.ok(chatService.getAllConversationsByCurrentUserId());
     }
 
-    @Operation(summary = "Get messages by recipient ID")
+    @Operation(summary = "Get messages by conservation ID")
     @SecurityRequirement(name = "Bearer Authentication")
-    @GetMapping("/conversation/{recipientId}")
-    public ResponseEntity<?> getMessageByConversationId(@PathVariable int recipientId) {
-        return ResponseEntity.ok(chatService.getMessageByConversationId(recipientId));
+    @GetMapping("/messages/conversation/{conservationId}")
+    public ResponseEntity<?> getMessageByConversationId(@PathVariable int conservationId) {
+        return ResponseEntity.ok(chatService.getMessageByConversationId(conservationId));
     }
 }

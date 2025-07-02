@@ -38,8 +38,8 @@ public class SecurityConfig {
             Map.entry("/api/users/find-friends", HttpMethod.GET),
             Map.entry("/api/users/upload-profile-images", HttpMethod.POST),
             Map.entry("/api/chat/create/new-chat/{userId}", HttpMethod.POST),
-            Map.entry("/api/chat/current-user/conversations", HttpMethod.GET),
-            Map.entry("/api/chat/conversation/{recipientId}", HttpMethod.GET)
+            Map.entry("/api/chat/current/conversations", HttpMethod.GET),
+            Map.entry("/api/chat/messages/conversation/{conservationId}", HttpMethod.GET)
     );
 
     @Bean

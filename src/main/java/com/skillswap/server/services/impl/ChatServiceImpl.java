@@ -1,14 +1,14 @@
 package com.skillswap.server.services.impl;
 
 import com.skillswap.server.dto.payload.MessagePayload;
+import com.skillswap.server.dto.response.ConversationDTO;
 import com.skillswap.server.dto.response.MessageDTO;
-import com.skillswap.server.dto.response.UserDTO;
 import com.skillswap.server.entities.Conversation;
 import com.skillswap.server.entities.Message;
 import com.skillswap.server.entities.Participant;
 import com.skillswap.server.entities.User;
 import com.skillswap.server.mapper.ChatMapper;
-import com.skillswap.server.mapper.UserMapper;
+import com.skillswap.server.mapper.ConversationMapper;
 import com.skillswap.server.repositories.ConversationRepository;
 import com.skillswap.server.repositories.MessageRepository;
 import com.skillswap.server.repositories.ParticipantRepository;
@@ -35,8 +35,8 @@ public class ChatServiceImpl implements ChatService {
     private final ConversationRepository conversationRepository;
     private final ParticipantRepository participantRepository;
     private final MessageRepository messageRepository;
-    private final UserMapper userMapper;
     private final ChatMapper chatMapper;
+    private final ConversationMapper conversationMapper;
 
     @Override
     public Conversation createChat(int userId) {
@@ -69,20 +69,9 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public List<UserDTO> getAllUsersConversedWith() {
-        User user = userService.getAuthenticatedUser();
-//        List<User> currentChatUsers = participantRepository.findAllUsersConversedWith(user.getId());
-        List<User> currentChatUsers = participantRepository.findUsersInConversationWith(user.getId());
-
-        return currentChatUsers.stream()
-                .map(userMapper::chatUserDTO)
-                .toList();
-    }
-
-    @Override
-    public List<MessageDTO> getMessageByConversationId(int recipientId) {
+    public List<MessageDTO> getMessageByConversationId(int conservationId ) {
         User requestUser = userService.getAuthenticatedUser();
-        Conversation conversation = conversationRepository.findConversationByUserIds(requestUser.getId(), recipientId)
+        Conversation conversation = conversationRepository.findById(conservationId)
                 .orElseThrow(() -> new RuntimeException("Conversation not found"));
 
         List<Message> messageList = messageRepository.findByConversationId(conversation.getId());
@@ -97,8 +86,9 @@ public class ChatServiceImpl implements ChatService {
     public MessageDTO sendMessage(MessagePayload message) {
         User sender = userRepository.findById(message.getSenderId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        Conversation conversation = conversationRepository.findConversationByUserIds(message.getSenderId(), message.getRecipientId())
-                .orElseThrow(() -> new RuntimeException("Conversation not found"));
+        Conversation conversation = conversationRepository
+                .findById(message.getConversationId())
+        .orElseThrow(() -> new RuntimeException("Conversation not found"));
 
         Message newMessage = new Message();
         newMessage.setContent(message.getContent());
@@ -108,5 +98,24 @@ public class ChatServiceImpl implements ChatService {
 
         messageRepository.save(newMessage);
         return chatMapper.toMessageDTO(newMessage, sender.getId());
+    }
+
+    @Override
+    public List<ConversationDTO> getAllConversationsByCurrentUserId() {
+        User user = userService.getAuthenticatedUser();
+        List<Conversation> conversations = conversationRepository.findAllUserConversationWith(user.getId());
+
+        // Remove the current user from the participants list in each conversation
+        for(Conversation conversation : conversations){
+            if(!conversation.getParticipants().isEmpty()){
+                conversation.setParticipants(
+                        conversation.getParticipants()
+                                .stream()
+                                .filter(participant -> participant.getUser().getId() != user.getId()).collect(Collectors.toList())
+                );
+            }
+        }
+
+        return conversations.stream().map(conversationMapper::toConversationDTO).collect(Collectors.toList());
     }
 }

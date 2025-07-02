@@ -25,4 +25,10 @@ public interface ParticipantRepository extends JpaRepository<Participant, Intege
     WHERE p1.user.id = :currentUserId AND u.id != :currentUserId
 """)
     List<User> findUsersInConversationWith(@Param("currentUserId") int currentUserId);
+
+    @Query("SELECT DISTINCT p FROM Participant p " +
+            "JOIN User u on p.user.id = u.id J" +
+            "OIN Participant p2 ON p2.conversation.id = p.conversation.id " +
+            "WHERE p2.user.id = :userId AND u.id != :userId")
+    List<Participant> findAllUserConversationWith(@Param("userId") int userId);
 }

@@ -9,6 +9,6 @@ import lombok.*;
 public class MessagePayload {
 
     private Integer senderId;
-    private Integer recipientId;
+    private Integer conversationId;
     private String content;
 }
