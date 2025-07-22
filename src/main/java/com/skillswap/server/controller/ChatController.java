@@ -33,12 +33,6 @@ public class ChatController {
         );
     }
 
-    @PostMapping("/send-message")
-    public ResponseEntity<?> sendMessage(@RequestBody MessagePayload messagePayload){
-        MessageDTO savedMsg = chatService.sendMessage(messagePayload);
-        return ResponseEntity.ok(savedMsg);
-    }
-
     @Operation(summary = "Create a new chat")
     @SecurityRequirement(name = "Bearer Authentication")
     @PostMapping("/create/new-chat/{userId}")

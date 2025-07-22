@@ -112,6 +112,7 @@ public class MembershipServiceImpl implements MembershipService {
                 .returnUrl(returnUrl)
                 .cancelUrl(cancelUrl)
                 .item(item)
+                .expiredAt(3600)
                 .build();
 
         CheckoutResponseData response = payOS.createPaymentLink(data);
@@ -120,6 +121,7 @@ public class MembershipServiceImpl implements MembershipService {
                 .code(response.getStatus())
                 .message(response.getDescription())
                 .paymentUrl(response.getCheckoutUrl())
+                .qrCode(response.getQrCode())
                 .build();
     }
 
