@@ -29,6 +29,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 @Service
@@ -112,7 +113,6 @@ public class MembershipServiceImpl implements MembershipService {
                 .returnUrl(returnUrl)
                 .cancelUrl(cancelUrl)
                 .item(item)
-                .expiredAt(3600)
                 .build();
 
         CheckoutResponseData response = payOS.createPaymentLink(data);
