@@ -3,9 +3,9 @@ package com.skillswap.server.services;
 import com.skillswap.server.dto.request.PaymentProcessRequest;
 import com.skillswap.server.dto.response.MembershipDTO;
 import com.skillswap.server.dto.response.MembershipSubscriptionDTO;
-import com.skillswap.server.dto.response.PaymentDTO;
 import com.skillswap.server.entities.Membership;
-import com.skillswap.server.entities.MembershipSubscription;
+import vn.payos.type.CheckoutResponseData;
+import vn.payos.type.PaymentLinkData;
 
 import java.util.List;
 
@@ -15,10 +15,12 @@ public interface MembershipService {
 
     List<MembershipDTO> getAllMemberships();
 
-    PaymentDTO createPayment(int membershipId) throws Exception;
+    CheckoutResponseData createPayment(int membershipId) throws Exception;
 
     MembershipSubscriptionDTO processPayment(PaymentProcessRequest request);
 
     MembershipSubscriptionDTO getUserMembershipSubscription();
     List<Membership> getAllMembershipsForAdmin();
+
+    PaymentLinkData cancelPayment(long orderCode) throws Exception;
 }

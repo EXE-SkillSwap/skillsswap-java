@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import vn.payos.type.CheckoutResponseData;
 
 import java.util.List;
 
@@ -55,7 +56,7 @@ public class MembershipController {
                description = "This endpoint allows users to create a payment for a specific membership." +
                        "The request body must contain the membership ID.")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<PaymentDTO> createMembershipPayment(@PathVariable int membershipId) throws Exception {
+    public ResponseEntity<CheckoutResponseData> createMembershipPayment(@PathVariable int membershipId) throws Exception {
         return new ResponseEntity<>(membershipService.createPayment(membershipId), HttpStatus.CREATED);
     }
 

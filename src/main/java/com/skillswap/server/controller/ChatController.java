@@ -26,11 +26,8 @@ public class ChatController {
     @MessageMapping("/chat")
     public void processMessage(@Payload MessagePayload messagePayload){
         MessageDTO savedMsg = chatService.sendMessage(messagePayload);
-        simpMessagingTemplate.convertAndSendToUser(
-                "chat",
-                "/queue/messages",
-                savedMsg
-        );
+        log.info("Message sent: {}", savedMsg.getContent());
+        simpMessagingTemplate.convertAndSend("/topic/chat/"+messagePayload.getConversationId(), savedMsg);
     }
 
     @Operation(summary = "Create a new chat")

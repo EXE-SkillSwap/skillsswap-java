@@ -3,7 +3,6 @@ package com.skillswap.server.services.impl;
 import com.skillswap.server.dto.request.PaymentProcessRequest;
 import com.skillswap.server.dto.response.MembershipDTO;
 import com.skillswap.server.dto.response.MembershipSubscriptionDTO;
-import com.skillswap.server.dto.response.PaymentDTO;
 import com.skillswap.server.entities.Membership;
 import com.skillswap.server.entities.MembershipSubscription;
 import com.skillswap.server.entities.User;
@@ -24,12 +23,12 @@ import vn.payos.PayOS;
 import vn.payos.type.CheckoutResponseData;
 import vn.payos.type.ItemData;
 import vn.payos.type.PaymentData;
+import vn.payos.type.PaymentLinkData;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 @Service
@@ -66,7 +65,7 @@ public class MembershipServiceImpl implements MembershipService {
     }
 
     @Override
-    public PaymentDTO createPayment(int membershipId) throws Exception {
+    public CheckoutResponseData createPayment(int membershipId) throws Exception {
         String currentTimeString = String.valueOf(new Date().getTime());
         long orderCode = Long.parseLong(currentTimeString.substring(currentTimeString.length() - 6));
 
@@ -96,7 +95,7 @@ public class MembershipServiceImpl implements MembershipService {
         //PayOS
 
         String name = "Gói thành viên SkillSwap - " + membership.getName();
-        String desc = "Thanh toán - " + user.getId() + " - " + orderCode;
+        String desc = "Thanh toán - " + membership.getName() + " - " + orderCode;
         String returnUrl = clientUrl + "/payment/callback";
         String cancelUrl = clientUrl + "/payment/callback";
 
@@ -116,13 +115,7 @@ public class MembershipServiceImpl implements MembershipService {
                 .build();
 
         CheckoutResponseData response = payOS.createPaymentLink(data);
-        System.out.println(orderCode);
-        return PaymentDTO.builder()
-                .code(response.getStatus())
-                .message(response.getDescription())
-                .paymentUrl(response.getCheckoutUrl())
-                .qrCode(response.getQrCode())
-                .build();
+        return response;
     }
 
     @Override
@@ -189,5 +182,15 @@ public class MembershipServiceImpl implements MembershipService {
     @Override
     public List<Membership> getAllMembershipsForAdmin() {
         return membershipRepository.findAll();
+    }
+
+    @Override
+    public PaymentLinkData cancelPayment(long orderCode) throws Exception {
+        MembershipSubscription subscription = membershipSubscriptionRepository.findByOrderCode(orderCode)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hàng với mã: " + orderCode));
+        subscription.setPaymentStatus(PaymentStatus.CANCELLED);
+        membershipSubscriptionRepository.save(subscription);
+        return payOS.cancelPaymentLink(orderCode, "Hủy đơn hàng với mã: " + orderCode);
+
     }
 }
