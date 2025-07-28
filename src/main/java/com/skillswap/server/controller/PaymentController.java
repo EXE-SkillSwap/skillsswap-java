@@ -55,7 +55,7 @@ public class PaymentController {
     @PostMapping("/webhook/verify")
     public ResponseEntity<Map<String, Boolean>> verifyWebhook(@RequestBody Webhook request){
         try {
-//            var response = paymentService.verifyPaymentWebhookData(request);
+            var response = paymentService.verifyPaymentWebhookData(request);
             return ResponseEntity.ok(Map.of("success", true));
         } catch (Exception e) {
             return ResponseEntity.ok(Map.of("success", false));
