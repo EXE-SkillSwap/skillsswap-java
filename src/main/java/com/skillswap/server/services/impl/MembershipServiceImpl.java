@@ -100,7 +100,7 @@ public class MembershipServiceImpl implements MembershipService {
         //PayOS
 
         String name = "Gói thành viên SkillSwap - " + membership.getName();
-        String desc = "Thanh toán - " + membership.getName() + " - " + orderCode;
+        String desc =  membership.getName() + " - " + orderCode;
         String returnUrl = clientUrl + "/payment/callback";
         String cancelUrl = clientUrl + "/payment/callback";
 
