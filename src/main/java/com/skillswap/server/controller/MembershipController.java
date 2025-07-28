@@ -44,7 +44,7 @@ public class MembershipController {
     }
 
     @Operation(summary = "Get all memberships",
-               description = "This endpoint retrieves all memberships. No authentication is required.")
+               description = "This endpoint retrieves all memberships")
     @GetMapping
     public ResponseEntity<List<MembershipDTO>> getMemberships(){
         return new ResponseEntity<>(membershipService.getAllMemberships(), HttpStatus.OK);

@@ -23,4 +23,5 @@ public class MembershipDTO {
     @Min(value = 1, message = "Price must be greater than 0")
     private BigDecimal price;
     private String description;
+    private boolean isBought;
 }

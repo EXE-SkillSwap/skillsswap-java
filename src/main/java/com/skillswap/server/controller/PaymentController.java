@@ -1,12 +1,14 @@
 package com.skillswap.server.controller;
 
 import com.skillswap.server.dto.request.CancelPaymentRequest;
+import com.skillswap.server.dto.request.MockPaymentRequest;
 import com.skillswap.server.dto.request.WebhookUrlRequest;
 import com.skillswap.server.services.MembershipService;
 import com.skillswap.server.services.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vn.payos.type.Webhook;
 
 @RestController
 @RequestMapping("/api/payment")
@@ -34,6 +36,28 @@ public class PaymentController {
         } catch (Exception e) {
             return  ResponseEntity.badRequest()
                     .body("Failed to cancel payment: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/mock-verify")
+    public ResponseEntity<?> mockVerifyPayment(@RequestBody MockPaymentRequest request) {
+        try {
+            paymentService.mockVerifyPayment(request);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body("Failed to verify payment: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/webhook/verify")
+    public ResponseEntity<?> verifyWebhook(@RequestBody Webhook request){
+        try {
+            var response = paymentService.verifyPaymentWebhookData(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body("Failed to verify webhook: " + e.getMessage());
         }
     }
 }

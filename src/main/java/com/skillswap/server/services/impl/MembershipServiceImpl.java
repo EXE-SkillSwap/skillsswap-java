@@ -61,7 +61,12 @@ public class MembershipServiceImpl implements MembershipService {
     @Override
     public List<MembershipDTO> getAllMemberships() {
         List<Membership> memberships = membershipRepository.findAllByIsDeletedFalse();
-        return memberships.stream().map(membershipMapper::toMembershipDTO).collect(Collectors.toList());
+        return memberships.stream().map(membership -> {
+            boolean isBought = membershipSubscriptionRepository
+                    .findByUserIdAndMembershipIdAndStatus(userService.getAuthenticatedUser().getId(), membership.getId(), MembershipSubscriptionStatus.ACTIVE)
+                    .isPresent();
+            return membershipMapper.toMembershipDTO(membership, isBought);
+        }).collect(Collectors.toList());
     }
 
     @Override

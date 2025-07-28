@@ -16,4 +16,6 @@ public interface MembershipSubscriptionRepository extends JpaRepository<Membersh
     Optional<MembershipSubscription> findByUserIdAndStatusAndIsUpdatedTrue(int userId, MembershipSubscriptionStatus status);
 
     List<MembershipSubscription> findByStatus(MembershipSubscriptionStatus status);
+
+    Optional<MembershipSubscription> findByUserIdAndMembershipIdAndStatus(int userId, int membershipId, MembershipSubscriptionStatus status);
 }

@@ -20,4 +20,19 @@ public class MembershipMapper {
 
         return membershipDTO;
     }
+
+    public MembershipDTO toMembershipDTO(Membership membership, boolean isBought) {
+        if (membership == null) {
+            return null;
+        }
+        MembershipDTO membershipDTO = new MembershipDTO();
+        membershipDTO.setId(membership.getId());
+        membershipDTO.setName(membership.getName());
+        membershipDTO.setDescription(membership.getDescription());
+        membershipDTO.setPrice(membership.getPrice());
+        membershipDTO.setDuration(membership.getDuration());
+        membershipDTO.setBought(isBought);
+
+        return membershipDTO;
+    }
 }

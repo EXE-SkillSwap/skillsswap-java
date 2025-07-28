@@ -1,5 +1,6 @@
 package com.skillswap.server.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.skillswap.server.entities.Membership;
 import com.skillswap.server.entities.User;
 import com.skillswap.server.enums.MembershipSubscriptionStatus;
@@ -21,7 +22,9 @@ import java.time.LocalDateTime;
 public class MembershipSubscriptionDTO {
 
     private int id;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC+7")
     private LocalDateTime startDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC+7")
     private LocalDateTime endDate;
     private MembershipSubscriptionStatus status;
     private PaymentStatus paymentStatus;
