@@ -27,11 +27,10 @@ public class PaymentServiceImpl implements PaymentService {
 
 
     @Override
-    public String confirmWebhook(String webhookUrl) throws Exception {
+    public String confirmWebhook(String webhookUrl) {
         try {
             return payOS.confirmWebhook(webhookUrl);
         }catch (Exception e){
-            // Log the exception or handle it as needed
             throw new RuntimeException("Failed to confirm webhook: " + e.getMessage());
         }
     }

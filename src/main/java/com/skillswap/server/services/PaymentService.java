@@ -6,7 +6,7 @@ import vn.payos.type.WebhookData;
 
 public interface PaymentService {
 
-    String confirmWebhook(String webhookUrl) throws Exception;
+    String confirmWebhook(String webhookUrl);
 
     WebhookData verifyPaymentWebhookData(Webhook req) throws Exception;
 

@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.payos.type.Webhook;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/payment")
 @RequiredArgsConstructor
@@ -51,13 +53,12 @@ public class PaymentController {
     }
 
     @PostMapping("/webhook/verify")
-    public ResponseEntity<?> verifyWebhook(@RequestBody Webhook request){
+    public ResponseEntity<Map<String, Boolean>> verifyWebhook(@RequestBody Webhook request){
         try {
             var response = paymentService.verifyPaymentWebhookData(request);
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(Map.of("success", true));
         } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                    .body("Failed to verify webhook: " + e.getMessage());
+            return ResponseEntity.ok(Map.of("success", false));
         }
     }
 }
