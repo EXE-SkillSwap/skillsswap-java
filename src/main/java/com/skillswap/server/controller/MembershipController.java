@@ -46,6 +46,7 @@ public class MembershipController {
     @Operation(summary = "Get all memberships",
                description = "This endpoint retrieves all memberships")
     @GetMapping
+    @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<List<MembershipDTO>> getMemberships(){
         return new ResponseEntity<>(membershipService.getAllMemberships(), HttpStatus.OK);
     }

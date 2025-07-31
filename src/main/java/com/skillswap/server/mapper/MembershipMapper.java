@@ -17,6 +17,7 @@ public class MembershipMapper {
         membershipDTO.setDescription(membership.getDescription());
         membershipDTO.setPrice(membership.getPrice());
         membershipDTO.setDuration(membership.getDuration());
+        membershipDTO.setFeatures(membership.getFeatures());
 
         return membershipDTO;
     }
@@ -31,6 +32,7 @@ public class MembershipMapper {
         membershipDTO.setDescription(membership.getDescription());
         membershipDTO.setPrice(membership.getPrice());
         membershipDTO.setDuration(membership.getDuration());
+        membershipDTO.setFeatures(membership.getFeatures());
         membershipDTO.setBought(isBought);
 
         return membershipDTO;

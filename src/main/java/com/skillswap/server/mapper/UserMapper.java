@@ -35,7 +35,6 @@ public class UserMapper {
         userDTO.setGender(user.getGender());
         userDTO.setAge(user.getAge());
         userDTO.setBirthday(user.getBirthday() != null ? user.getBirthday().toString() : null);
-        userDTO.setProfileImages(profileImageMapper.toProfileImageDTOs(user.getProfileImages()));
 
         return userDTO;
     }
@@ -50,6 +49,22 @@ public class UserMapper {
         userDTO.setFirstName(user.getFirstName());
         userDTO.setLastName(user.getLastName());
         userDTO.setAvatarUrl(user.getAvatarUrl());
+        return userDTO;
+    }
+
+    public UserDTO userCourseDTO(User user) {
+        if (user == null) {
+            return null;
+        }
+
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setFirstName(user.getFirstName());
+        userDTO.setLastName(user.getLastName());
+        userDTO.setUsername(user.getUsername());
+        userDTO.setAvatarUrl(user.getAvatarUrl());
+        userDTO.setBio(user.getBio());
+        userDTO.setLocation(user.getLocation());
         return userDTO;
     }
 }

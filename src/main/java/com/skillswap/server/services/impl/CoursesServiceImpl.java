@@ -13,6 +13,8 @@ import com.skillswap.server.services.CoursesService;
 import com.skillswap.server.services.MembershipService;
 import com.skillswap.server.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -47,5 +49,14 @@ public class CoursesServiceImpl implements CoursesService {
             coursesList.add(courses);
         }
         return coursesList.stream().map(courseMapper::toCourseDTO).toList();
+    }
+
+    @Override
+    public Page<CourseDTO> getCoursesByCurrentUser(int page, int size) {
+        User user = userService.getAuthenticatedUser();
+
+        Page<Courses> coursesPage = coursesRepository.findByUserIdOrderByCreatedAtDesc(user.getId(), PageRequest.of(page, size));
+
+        return coursesPage.map(courseMapper::toCourseDTO);
     }
 }

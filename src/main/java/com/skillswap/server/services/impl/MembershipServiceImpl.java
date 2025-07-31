@@ -53,6 +53,7 @@ public class MembershipServiceImpl implements MembershipService {
         membership.setDescription(membershipDTO.getDescription());
         membership.setPrice(membershipDTO.getPrice());
         membership.setDuration(membershipDTO.getDuration());
+        membership.setFeatures(membershipDTO.getFeatures());
         Membership savedMembership = membershipRepository.save(membership);
 
         return membershipMapper.toMembershipDTO(savedMembership);
@@ -100,7 +101,7 @@ public class MembershipServiceImpl implements MembershipService {
         //PayOS
 
         String name = "Gói thành viên SkillSwap - " + membership.getName();
-        String desc =  membership.getName() + " - " + orderCode;
+        String desc =  "SSM"+orderCode;
         String returnUrl = clientUrl + "/payment/callback";
         String cancelUrl = clientUrl + "/payment/callback";
 
@@ -177,7 +178,7 @@ public class MembershipServiceImpl implements MembershipService {
         List<MembershipSubscription> activeSubscriptions = membershipSubscriptionRepository.findByStatus(MembershipSubscriptionStatus.ACTIVE);
         LocalDateTime now = LocalDateTime.now();
         for(MembershipSubscription subscription : activeSubscriptions){
-            if(subscription.getEndDate().isAfter(now)){
+            if(subscription.getEndDate().isBefore(now)){
                 subscription.setStatus(MembershipSubscriptionStatus.EXPIRED);
                 membershipSubscriptionRepository.save(subscription);
             }

@@ -15,7 +15,6 @@ import static org.springframework.data.web.config.EnableSpringDataWebSupport.Pag
 public class ServerApplication {
 
 	public static void main(String[] args) {
-		TimeZone.setDefault(TimeZone.getTimeZone("GMT+07:00"));
 		SpringApplication.run(ServerApplication.class, args);
 	}
 

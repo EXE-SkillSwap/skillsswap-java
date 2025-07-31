@@ -37,6 +37,8 @@ public class Membership {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
     private boolean isDeleted = false;
+    @Column(columnDefinition = "TEXT")
+    private String features;
     @JsonIgnore
     @OneToMany(mappedBy = "membership")
     private List<MembershipSubscription> membershipSubscriptions;

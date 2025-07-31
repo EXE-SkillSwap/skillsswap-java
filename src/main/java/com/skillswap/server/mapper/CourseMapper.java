@@ -25,7 +25,7 @@ public class CourseMapper {
         courseDTO.setRating(courses.getRating());
         courseDTO.setStatus(courses.getStatus().name());
         courseDTO.setCreatedAt(courses.getCreatedAt());
-        courseDTO.setUser(userMapper.userDTO(courses.getUser()));
+        courseDTO.setUser(userMapper.userCourseDTO(courses.getUser()));
         return courseDTO;
     }
 }
