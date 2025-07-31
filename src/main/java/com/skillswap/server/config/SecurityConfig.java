@@ -1,6 +1,7 @@
 package com.skillswap.server.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -25,6 +26,9 @@ import java.util.Map;
 @EnableMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+    @Value("${client.url}")
+    private String allowedOrigins;
 
     private final AuthDecode authDecode;
     private final AuthEntryPoint authEntryPoint;
@@ -77,9 +81,10 @@ public class SecurityConfig {
 
         http.cors(cors -> cors.configurationSource(request -> {
             CorsConfiguration corsConfiguration = new CorsConfiguration();
-            corsConfiguration.addAllowedOrigin("*");
-            corsConfiguration.addAllowedMethod("*");
-            corsConfiguration.addAllowedHeader("*");
+            corsConfiguration.setAllowedOrigins(List.of(allowedOrigins.split(",")));
+            corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
+            corsConfiguration.setAllowedHeaders(List.of("*"));
+            corsConfiguration.setAllowCredentials(true);
             return corsConfiguration;
         }));
         return http.build();
