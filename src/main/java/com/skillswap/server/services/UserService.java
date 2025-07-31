@@ -28,4 +28,6 @@ public interface UserService {
     String uploadProfileImages(MultipartFile[] files) throws IOException;
 
     List<ProfileImageDTO> getProfileImagesByUserId(int userId);
+
+    User getUserById(int userId);
 }

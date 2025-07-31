@@ -198,4 +198,10 @@ public class MembershipServiceImpl implements MembershipService {
         return payOS.cancelPaymentLink(orderCode, "Hủy đơn hàng với mã: " + orderCode);
 
     }
+
+    @Override
+    public MembershipSubscription getValidMembershipSubscription(int userId) {
+        return membershipSubscriptionRepository.findByUserIdAndStatus(userId, MembershipSubscriptionStatus.ACTIVE)
+                .orElse(null);
+    }
 }

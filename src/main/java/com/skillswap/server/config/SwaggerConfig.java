@@ -21,8 +21,8 @@ import org.springframework.context.annotation.Configuration;
                 )
         ),
         servers = {
-                @Server(url = "https://anhnhv.io.vn", description = "Production Server"),
-                @Server(url = "http://localhost:8080", description = "Local Development Server")
+                @Server(url = "http://localhost:8080", description = "Local Development Server"),
+                @Server(url = "https://anhnhv.io.vn", description = "Production Server")
         }
 )
 @SecurityScheme(

@@ -167,4 +167,10 @@ public class UserServiceImpl implements UserService {
         return images.stream().map(profileImageMapper::toProfileImageDTO)
                 .toList();
     }
+
+    @Override
+    public User getUserById(int userId) {
+        return userRepository.findById(userId).orElseThrow(() ->
+                new RuntimeException("Người dùng không tồn tại"));
+    }
 }

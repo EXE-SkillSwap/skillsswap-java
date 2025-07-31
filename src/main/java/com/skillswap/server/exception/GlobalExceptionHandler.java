@@ -1,5 +1,7 @@
 package com.skillswap.server.exception;
 
+import com.skillswap.server.dto.response.ErrorResponse;
+import com.skillswap.server.enums.ErrorCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -52,6 +54,12 @@ public class GlobalExceptionHandler {
             errors.put(fieldName, errorMessage);
         });
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NotMembershipException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleNotMembershipException(NotMembershipException ex) {
+        return new ErrorResponse(ErrorCode.NOT_MEMBERSHIP.getCode(),  ex.getMessage());
     }
 
 

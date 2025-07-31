@@ -4,6 +4,7 @@ import com.skillswap.server.dto.request.PaymentProcessRequest;
 import com.skillswap.server.dto.response.MembershipDTO;
 import com.skillswap.server.dto.response.MembershipSubscriptionDTO;
 import com.skillswap.server.entities.Membership;
+import com.skillswap.server.entities.MembershipSubscription;
 import vn.payos.type.CheckoutResponseData;
 import vn.payos.type.PaymentLinkData;
 
@@ -23,4 +24,6 @@ public interface MembershipService {
     List<Membership> getAllMembershipsForAdmin();
 
     PaymentLinkData cancelPayment(long orderCode) throws Exception;
+
+    MembershipSubscription getValidMembershipSubscription(int userId);
 }

@@ -39,7 +39,9 @@ public class SecurityConfig {
             Map.entry("/api/users/upload-profile-images", HttpMethod.POST),
             Map.entry("/api/chat/create/new-chat/{userId}", HttpMethod.POST),
             Map.entry("/api/chat/current/conversations", HttpMethod.GET),
-            Map.entry("/api/chat/messages/conversation/{conservationId}", HttpMethod.GET)
+            Map.entry("/api/chat/messages/conversation/{conservationId}", HttpMethod.GET),
+            Map.entry("/api/notifications", HttpMethod.GET),
+            Map.entry("/api/courses", HttpMethod.POST)
     );
 
     @Bean
