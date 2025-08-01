@@ -23,7 +23,20 @@ public class NotificationController {
     @PostMapping
     public ResponseEntity<?> createNotification(@RequestBody NotificationRequest request) {
         notificationService.sendNotification(request);
-        return ResponseEntity.ok("Notification sent successfully");
+        return ResponseEntity.ok("Thông báo đã được gửi thành công");
+    }
+
+    @PutMapping("/make-read/{notificationId}")
+    public ResponseEntity<?> makeNotificationRead(@PathVariable int notificationId) {
+        notificationService.makeNotificationRead(notificationId);
+        return ResponseEntity.ok("Thông báo đã được đánh dấu là đã đọc");
+    }
+
+    @PutMapping("/make-all-read")
+    @SecurityRequirement(name = "Bearer Authentication")
+    public ResponseEntity<?> makeAllNotificationsRead() {
+        notificationService.makeAllNotificationsRead();
+        return ResponseEntity.ok("Tất cả thông báo đã được đánh dấu là đã đọc");
     }
 
 }

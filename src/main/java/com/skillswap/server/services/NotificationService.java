@@ -11,4 +11,7 @@ public interface NotificationService {
 
     List<NotificationDTO> getNotificationsByUser();
 
+    void makeNotificationRead(int notificationId);
+
+    void makeAllNotificationsRead(); // New method to mark all notifications as read for a user
 }

@@ -142,22 +142,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String uploadProfileImages(MultipartFile[] files) throws IOException {
+    public String uploadProfileImages(Map<String, Object> imageUrls) throws IOException {
         User authenticatedUser = getAuthenticatedUser();
-        if (files != null && files.length > 0) {
-            ProfileImages profileImages = new ProfileImages();
-            profileImages.setUser(authenticatedUser);
-            for (MultipartFile file : files) {
-                Map map = cloudinaryService.upload(file);
-                String publicId = (String) map.get("public_id");
-                String url = (String) map.get("url");
-                profileImages.setPublicId(publicId);
-                profileImages.setImageUrl(url);
-                authenticatedUser.getProfileImages().add(profileImages);
-                userRepository.save(authenticatedUser);
+        imageUrls.forEach((fieldName, value) -> {
 
-            }
-        }
+        });
         return "Tải lên ảnh đại diện thành công";
     }
 

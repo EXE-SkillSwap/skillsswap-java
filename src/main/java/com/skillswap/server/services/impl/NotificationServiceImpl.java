@@ -47,4 +47,20 @@ public class NotificationServiceImpl implements NotificationService {
         List<Notification> notifications = notificationRepository.findByUserIdOrderByCreatedAtDesc(user.getId());
         return notifications.stream().map(notificationMapper::toNotificationDTO).collect(Collectors.toList());
     }
+
+    @Override
+    public void makeNotificationRead(int notificationId) {
+        Notification notification = notificationRepository.findById(notificationId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy thông báo với ID: " + notificationId));
+        notification.setRead(true);
+        notificationRepository.save(notification);
+    }
+
+    @Override
+    public void makeAllNotificationsRead() {
+        User user = userService.getAuthenticatedUser();
+        List<Notification> notifications = notificationRepository.findByUserIdOrderByCreatedAtDesc(user.getId());
+        notifications.forEach(notification -> notification.setRead(true));
+        notificationRepository.saveAll(notifications);
+    }
 }

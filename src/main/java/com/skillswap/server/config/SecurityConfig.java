@@ -27,7 +27,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    @Value("${client.url}")
+    @Value("${cors.client.url}")
     private String allowedOrigins;
 
     private final AuthDecode authDecode;
@@ -46,6 +46,8 @@ public class SecurityConfig {
             Map.entry("/api/chat/current/conversations", HttpMethod.GET),
             Map.entry("/api/chat/messages/conversation/{conservationId}", HttpMethod.GET),
             Map.entry("/api/notifications", HttpMethod.GET),
+            Map.entry("/api/notifications/make-read/{notificationId}", HttpMethod.PUT),
+            Map.entry("/api/notifications/make-all-read", HttpMethod.PUT),
             Map.entry("/api/courses", HttpMethod.POST),
             Map.entry("/api/courses/my-courses", HttpMethod.GET)
     );

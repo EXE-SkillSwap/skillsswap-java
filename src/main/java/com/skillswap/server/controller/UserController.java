@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @RequestMapping("/api/users")
@@ -73,8 +74,8 @@ public class UserController {
     @PostMapping("/upload-profile-images")
     @SecurityRequirement(name = "Bearer Authentication")
     @Operation(summary = "Upload profile images")
-    public ResponseEntity<?> uploadProfileImages(@RequestParam("files") MultipartFile[] files) throws IOException {
-        return ResponseEntity.ok(userService.uploadProfileImages(files));
+    public ResponseEntity<?> uploadProfileImages(@RequestBody Map<String, Object> imageUrls) throws IOException {
+        return ResponseEntity.ok(userService.uploadProfileImages(imageUrls));
     }
 
     @GetMapping("/profile-images/{userId}")
