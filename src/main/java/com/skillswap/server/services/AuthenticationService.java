@@ -7,4 +7,5 @@ public interface AuthenticationService {
 
     AuthenticationResponse authenticate(AuthenticationRequest request);
 
+    AuthenticationResponse googleAuthentication(String code);
 }
