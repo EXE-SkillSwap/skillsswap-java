@@ -46,5 +46,7 @@ jobs:
         key: ${{ secrets.VPS_KEY }}
         script: |
           cd /home/root/skillswap
+          echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" > .env
+          echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
           docker-compose down || true
           docker-compose up -d --build
