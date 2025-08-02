@@ -1,6 +1,7 @@
 package com.skillswap.server.controller;
 
 import com.skillswap.server.dto.request.CreateUserRequest;
+import com.skillswap.server.dto.response.ProfileImageDTO;
 import com.skillswap.server.dto.response.UserDTO;
 import com.skillswap.server.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -74,8 +75,8 @@ public class UserController {
     @PostMapping("/upload-profile-images")
     @SecurityRequirement(name = "Bearer Authentication")
     @Operation(summary = "Upload profile images")
-    public ResponseEntity<?> uploadProfileImages(@RequestBody Map<String, Object> imageUrls) throws IOException {
-        return ResponseEntity.ok(userService.uploadProfileImages(imageUrls));
+    public ResponseEntity<?> uploadProfileImages(@RequestBody List<ProfileImageDTO> dtos) throws IOException {
+        return ResponseEntity.ok(userService.uploadProfileImages(dtos));
     }
 
     @GetMapping("/profile-images/{userId}")

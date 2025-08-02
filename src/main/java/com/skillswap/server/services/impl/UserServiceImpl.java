@@ -142,11 +142,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String uploadProfileImages(Map<String, Object> imageUrls) throws IOException {
+    public String uploadProfileImages(List<ProfileImageDTO> dtos) throws IOException {
         User authenticatedUser = getAuthenticatedUser();
-        imageUrls.forEach((fieldName, value) -> {
 
-        });
+        for(ProfileImageDTO profileImageDTO : dtos) {
+            ProfileImages profileImages = new ProfileImages();
+            profileImages.setUser(authenticatedUser);
+            profileImages.setImageUrl(profileImageDTO.getImageUrl());
+            profileImages.setPublicId(profileImageDTO.getPublicId());
+            profileImageRepository.save(profileImages);
+
+        }
+
         return "Tải lên ảnh đại diện thành công";
     }
 

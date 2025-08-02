@@ -25,7 +25,7 @@ public interface UserService {
 
     Page<UserDTO> getAllUsersForAdmin(int page, int size);
 
-    String uploadProfileImages(Map<String, Object> imageUrls) throws IOException;
+    String uploadProfileImages(List<ProfileImageDTO> dtos) throws IOException;
 
     List<ProfileImageDTO> getProfileImagesByUserId(int userId);
 
