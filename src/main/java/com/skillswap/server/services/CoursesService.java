@@ -11,4 +11,8 @@ public interface CoursesService {
     List<CourseDTO> createCourses(List<CourseCreateRequest> requests);
 
     Page<CourseDTO> getCoursesByCurrentUser(int page, int size);
+
+    CourseDTO getCourseById(int id);
+
+    Page<CourseDTO> getAllCourses(int page, int size, String searchString);
 }

@@ -63,8 +63,6 @@ public class UserMapper {
         userDTO.setLastName(user.getLastName());
         userDTO.setUsername(user.getUsername());
         userDTO.setAvatarUrl(user.getAvatarUrl());
-        userDTO.setBio(user.getBio());
-        userDTO.setLocation(user.getLocation());
         return userDTO;
     }
 }

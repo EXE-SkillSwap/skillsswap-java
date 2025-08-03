@@ -34,4 +34,21 @@ public class CoursesController {
             @RequestParam(defaultValue = "10") int size) {
         return ResponseEntity.ok(coursesService.getCoursesByCurrentUser(page, size));
     }
+
+    @GetMapping("/{courseId}")
+    @Operation(summary = "Lấy thông tin chi tiết khóa học",
+            description = "Lấy thông tin chi tiết của một khóa học theo ID")
+    public ResponseEntity<CourseDTO> getCourseById(@PathVariable int courseId) {
+        return ResponseEntity.ok(coursesService.getCourseById(courseId));
+    }
+
+    @GetMapping("/all")
+    @Operation(summary = "Lấy danh sách tất cả khóa học",
+            description = "Lấy danh sách tất cả khóa học với phân trang")
+    public ResponseEntity<?> getAllCourses(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false, name = "searchString") String searchString) {
+        return ResponseEntity.ok(coursesService.getAllCourses(page, size, searchString));
+    }
 }

@@ -20,6 +20,7 @@ public class CourseDTO {
     private double price;
     private double rating;
     private String status;
+    private String bannerUrl;
     private LocalDateTime createdAt;
     private UserDTO user;
 }

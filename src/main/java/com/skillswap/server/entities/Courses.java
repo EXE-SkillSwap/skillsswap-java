@@ -26,6 +26,7 @@ public class Courses {
     private String link;
     private double price;
     private double rating = 0.0;
+    private String bannerUrl;
     @Enumerated(EnumType.STRING)
     private CourseStatus status;
     @CreationTimestamp
