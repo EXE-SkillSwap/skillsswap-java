@@ -14,4 +14,13 @@ public class CoursesSpecification {
                     criteriaBuilder.like(criteriaBuilder.lower(root.get("description")), "%"+searchString.toLowerCase()+"%"));
         });
     }
+
+    public static Specification<Courses> hasStatus(String status){
+        return ((root, query, criteriaBuilder) -> {
+            if(status == null || status.isEmpty()){
+                return criteriaBuilder.conjunction();
+            }
+            return criteriaBuilder.or(criteriaBuilder.like(criteriaBuilder.lower(root.get("status")),"%" + status.toLowerCase() + "%"));
+        });
+    }
 }

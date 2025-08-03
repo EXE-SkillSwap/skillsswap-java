@@ -2,10 +2,12 @@ package com.skillswap.server.controller;
 
 import com.skillswap.server.dto.request.CourseCreateRequest;
 import com.skillswap.server.dto.response.CourseDTO;
+import com.skillswap.server.enums.CourseStatus;
 import com.skillswap.server.services.CoursesService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,7 +50,10 @@ public class CoursesController {
     public ResponseEntity<?> getAllCourses(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false, name = "searchString") String searchString) {
-        return ResponseEntity.ok(coursesService.getAllCourses(page, size, searchString));
+            @RequestParam(required = false, name = "searchString") String searchString,
+            @RequestParam(name = "status", defaultValue = "PENDING") CourseStatus status,
+            @RequestParam(name = "sortBy", defaultValue = "DESC") Sort.Direction sortBy
+            ) {
+        return ResponseEntity.ok(coursesService.getAllCourses(page, size, searchString, status, sortBy));
     }
 }

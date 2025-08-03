@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -84,9 +85,10 @@ public class CoursesServiceImpl implements CoursesService {
 
 
     @Override
-    public Page<CourseDTO> getAllCourses(int page, int size, String searchString) {
-        Specification<Courses> spec = Specification.allOf(CoursesSpecification.hasSearchString(searchString));
-        Pageable pageable = PageRequest.of(page, size);
+    public Page<CourseDTO> getAllCourses(int page, int size, String searchString, CourseStatus status, Sort.Direction sortBy) {
+        Specification<Courses> spec = Specification.allOf(CoursesSpecification.hasSearchString(searchString)
+                .and(CoursesSpecification.hasStatus(status.name())));
+        Pageable pageable = PageRequest.of(page, size, sortBy, "rating");
         Page<Courses> coursesPage = coursesRepository.findAll(spec, pageable);
         return coursesPage.map(courseMapper::toCourseDTO);
     }

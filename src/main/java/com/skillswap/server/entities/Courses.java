@@ -22,6 +22,7 @@ public class Courses {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String courseName;
+    @Column(columnDefinition = "LONGTEXT")
     private String description;
     private String link;
     private double price;
