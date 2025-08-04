@@ -1,6 +1,7 @@
 package com.skillswap.server.controller;
 
 import com.skillswap.server.dto.request.CourseCreateRequest;
+import com.skillswap.server.dto.request.RejectCourseRequest;
 import com.skillswap.server.dto.response.CourseDTO;
 import com.skillswap.server.enums.CourseStatus;
 import com.skillswap.server.services.CoursesService;
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -55,5 +57,23 @@ public class CoursesController {
             @RequestParam(name = "sortBy", defaultValue = "DESC") Sort.Direction sortBy
             ) {
         return ResponseEntity.ok(coursesService.getAllCourses(page, size, searchString, status, sortBy));
+    }
+
+    @PutMapping("/approve/{courseId}")
+    @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(summary = "Duyệt khóa học",
+            description = "Duyệt khóa học đã được tạo và chuyển trạng thái sang APPROVED")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> approveCourse(@PathVariable int courseId) {
+        return ResponseEntity.ok(coursesService.approveCourse(courseId));
+    }
+
+    @PutMapping("/reject")
+    @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(summary = "Từ chối khóa học",
+            description = "Từ chối học đã được tạo và chuyển trạng thái sang REJECTED")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> rejectCourse(@RequestBody RejectCourseRequest request) {
+        return ResponseEntity.ok(coursesService.rejectCourse(request.getCourseId(), request.getReason()));
     }
 }

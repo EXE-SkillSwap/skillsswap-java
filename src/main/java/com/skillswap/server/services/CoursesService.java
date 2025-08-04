@@ -17,4 +17,8 @@ public interface CoursesService {
     CourseDTO getCourseById(int id);
 
     Page<CourseDTO> getAllCourses(int page, int size, String searchString, CourseStatus status, Sort.Direction sortBy);
+
+    CourseDTO approveCourse(int courseId);
+
+    CourseDTO rejectCourse(int courseId, String reason);
 }

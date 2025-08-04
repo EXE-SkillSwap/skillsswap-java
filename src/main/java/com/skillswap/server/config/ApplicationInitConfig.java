@@ -37,7 +37,7 @@ public class ApplicationInitConfig {
             if(userRepository.findByRole(Role.ADMIN).isEmpty()){
                 User user = new User();
                 user.setUsername("admin");
-                user.setEmail("admin@gmail.com");
+                user.setEmail("admin@skillsswap.io.vn");
                 user.setPassword(passwordEncoder.encode("admin"));
                 user.setFirstName("Admin");
                 user.setLastName("SkillSwap");

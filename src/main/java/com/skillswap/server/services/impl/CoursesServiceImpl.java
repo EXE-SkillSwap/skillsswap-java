@@ -92,4 +92,34 @@ public class CoursesServiceImpl implements CoursesService {
         Page<Courses> coursesPage = coursesRepository.findAll(spec, pageable);
         return coursesPage.map(courseMapper::toCourseDTO);
     }
+
+    @Override
+    public CourseDTO approveCourse(int courseId) {
+        Courses course = coursesRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Khóa học không tồn tại"));
+        course.setStatus(CourseStatus.APPROVED);
+        course = coursesRepository.save(course);
+        NotificationRequest notificationRequest = new NotificationRequest();
+        notificationRequest.setTitle("Khóa học đã được phê duyệt");
+        notificationRequest.setContent("Khóa học của bạn đã được phê duyệt và có thể bắt đầu được đăng tải.");
+        notificationRequest.setUrl("/my-courses/" + course.getId());
+        notificationRequest.setUserId(course.getUser().getId());
+        notificationService.sendNotification(notificationRequest);
+        return courseMapper.toCourseDTO(course);
+    }
+
+    @Override
+    public CourseDTO rejectCourse(int courseId, String reason) {
+        Courses course = coursesRepository.findById(courseId)
+            .orElseThrow(() -> new RuntimeException("Khóa học không tồn tại"));
+        course.setStatus(CourseStatus.REJECTED);
+        course = coursesRepository.save(course);
+        NotificationRequest notificationRequest = new NotificationRequest();
+        notificationRequest.setTitle("Khóa học đã bị từ chối");
+        notificationRequest.setContent("Khóa học của bạn đã bị từ chối. Lý do: " + reason);
+        notificationRequest.setUrl("/my-courses/" + course.getId());
+        notificationRequest.setUserId(course.getUser().getId());
+        notificationService.sendNotification(notificationRequest);
+        return courseMapper.toCourseDTO(course);
+    }
 }

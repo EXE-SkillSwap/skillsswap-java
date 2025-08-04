@@ -49,7 +49,9 @@ public class SecurityConfig {
             Map.entry("/api/notifications/make-read/{notificationId}", HttpMethod.PUT),
             Map.entry("/api/notifications/make-all-read", HttpMethod.PUT),
             Map.entry("/api/courses", HttpMethod.POST),
-            Map.entry("/api/courses/my-courses", HttpMethod.GET)
+            Map.entry("/api/courses/my-courses", HttpMethod.GET),
+            Map.entry("/api/courses/approve/{courseId}", HttpMethod.PUT),
+            Map.entry("/api/courses/reject", HttpMethod.PUT)
     );
 
     @Bean
