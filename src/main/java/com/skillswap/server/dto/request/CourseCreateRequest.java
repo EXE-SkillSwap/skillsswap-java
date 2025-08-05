@@ -16,4 +16,5 @@ public class CourseCreateRequest {
     private String link;
     private double price;
     private String bannerUrl;
+    private String achievements;
 }

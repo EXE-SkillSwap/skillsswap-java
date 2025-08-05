@@ -9,6 +9,7 @@ import com.skillswap.server.entities.User;
 import com.skillswap.server.enums.CourseStatus;
 import com.skillswap.server.exception.NotMembershipException;
 import com.skillswap.server.mapper.CourseMapper;
+import com.skillswap.server.repositories.CourseAttendanceRepository;
 import com.skillswap.server.repositories.CoursesRepository;
 import com.skillswap.server.services.CoursesService;
 import com.skillswap.server.services.MembershipService;
@@ -35,6 +36,7 @@ public class CoursesServiceImpl implements CoursesService {
     private final CourseMapper courseMapper;
     private final UserService userService;
     private final NotificationService notificationService;
+    private final CourseAttendanceRepository courseAttendanceRepository;
 
     @Override
     public List<CourseDTO> createCourses(List<CourseCreateRequest> requests) {
@@ -53,6 +55,7 @@ public class CoursesServiceImpl implements CoursesService {
             courses.setStatus(CourseStatus.PENDING);
             courses.setBannerUrl(request.getBannerUrl());
             courses.setUser(user);
+            courses.setAchievements(request.getAchievements());
             courses = coursesRepository.save(courses);
             coursesList.add(courses);
         }
@@ -78,9 +81,12 @@ public class CoursesServiceImpl implements CoursesService {
 
     @Override
     public CourseDTO getCourseById(int id) {
+        User user = userService.getAuthenticatedUser();
         Courses course = coursesRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Khóa học không tồn tại"));
-        return courseMapper.toCourseDTO(course);
+                .orElseThrow(() -> new RuntimeException("Khóa học không tồn tại"));
+        boolean isEnrolled = courseAttendanceRepository.existsByCourseIdAndUserId(id, user.getId());
+        int totalEnrollments = courseAttendanceRepository.countByCourseId(id);
+        return courseMapper.toCourseDetailDTO(course, isEnrolled, totalEnrollments);
     }
 
 
@@ -102,7 +108,7 @@ public class CoursesServiceImpl implements CoursesService {
         NotificationRequest notificationRequest = new NotificationRequest();
         notificationRequest.setTitle("Khóa học đã được phê duyệt");
         notificationRequest.setContent("Khóa học của bạn đã được phê duyệt và có thể bắt đầu được đăng tải.");
-        notificationRequest.setUrl("/my-courses/" + course.getId());
+        notificationRequest.setUrl("/course/" + course.getId());
         notificationRequest.setUserId(course.getUser().getId());
         notificationService.sendNotification(notificationRequest);
         return courseMapper.toCourseDTO(course);
@@ -117,7 +123,7 @@ public class CoursesServiceImpl implements CoursesService {
         NotificationRequest notificationRequest = new NotificationRequest();
         notificationRequest.setTitle("Khóa học đã bị từ chối");
         notificationRequest.setContent("Khóa học của bạn đã bị từ chối. Lý do: " + reason);
-        notificationRequest.setUrl("/my-courses/" + course.getId());
+        notificationRequest.setUrl("/course/" + course.getId());
         notificationRequest.setUserId(course.getUser().getId());
         notificationService.sendNotification(notificationRequest);
         return courseMapper.toCourseDTO(course);

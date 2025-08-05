@@ -10,5 +10,7 @@ public interface CoursesRepository extends JpaRepository<Courses, Integer> {
 
     Page<Courses> findByUserIdOrderByCreatedAtDesc(int userId, Pageable pageable);
 
+    Page<Courses> findByUserId(int userId, Specification<Courses> spec, Pageable pageable);
+
     Page<Courses> findAll(Specification<Courses> spec, Pageable pageable);
 }

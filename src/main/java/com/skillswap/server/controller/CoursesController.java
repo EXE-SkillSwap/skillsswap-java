@@ -35,11 +35,13 @@ public class CoursesController {
             description = "Lấy danh sách khóa học đã tạo của người dùng hiện tại với phân trang")
     public ResponseEntity<?> getCoursesByCurrentUser(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size
+    ) {
         return ResponseEntity.ok(coursesService.getCoursesByCurrentUser(page, size));
     }
 
     @GetMapping("/{courseId}")
+    @SecurityRequirement(name = "Bearer Authentication")
     @Operation(summary = "Lấy thông tin chi tiết khóa học",
             description = "Lấy thông tin chi tiết của một khóa học theo ID")
     public ResponseEntity<CourseDTO> getCourseById(@PathVariable int courseId) {

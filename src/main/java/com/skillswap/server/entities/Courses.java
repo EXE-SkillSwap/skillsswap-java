@@ -28,6 +28,8 @@ public class Courses {
     private double price;
     private double rating = 0.0;
     private String bannerUrl;
+    @Column(columnDefinition = "LONGTEXT")
+    private String achievements;
     @Enumerated(EnumType.STRING)
     private CourseStatus status;
     @CreationTimestamp

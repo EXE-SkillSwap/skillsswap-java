@@ -1,6 +1,5 @@
 package com.skillswap.server.entities;
 
-import com.skillswap.server.enums.CourseAttendanceStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,21 +14,20 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@Table(name = "course_attendance")
-public class CourseAttendance {
+@Table(name = "feedbacks")
+public class Feedback {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-    @ManyToOne
-    @JoinColumn(name = "course_id", nullable = false)
-    private Courses course;
-    @Enumerated(EnumType.STRING)
-    private CourseAttendanceStatus status;
+    private String content;
+    private int rating;
     @CreationTimestamp
     private LocalDateTime createdAt;
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "course_id", nullable = false)
+    private Courses course;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }

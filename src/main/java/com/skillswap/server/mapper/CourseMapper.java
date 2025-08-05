@@ -29,4 +29,26 @@ public class CourseMapper {
         courseDTO.setUser(userMapper.userCourseDTO(courses.getUser()));
         return courseDTO;
     }
+
+    public CourseDTO toCourseDetailDTO(Courses courses, boolean isEnrolled, int totalEnrollments) {
+        if (courses == null) {
+            return null;
+        }
+
+        CourseDTO courseDTO = new CourseDTO();
+        courseDTO.setId(courses.getId());
+        courseDTO.setCourseName(courses.getCourseName());
+        courseDTO.setDescription(courses.getDescription());
+        courseDTO.setLink(courses.getLink());
+        courseDTO.setPrice(courses.getPrice());
+        courseDTO.setRating(courses.getRating());
+        courseDTO.setStatus(courses.getStatus().name());
+        courseDTO.setCreatedAt(courses.getCreatedAt());
+        courseDTO.setBannerUrl(courses.getBannerUrl());
+        courseDTO.setUser(userMapper.userCourseDTO(courses.getUser()));
+        courseDTO.setEnrolled(isEnrolled);
+        courseDTO.setTotalEnrollments(totalEnrollments);
+        courseDTO.setAchievements(courses.getAchievements());
+        return courseDTO;
+    }
 }

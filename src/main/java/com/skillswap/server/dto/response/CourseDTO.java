@@ -1,5 +1,6 @@
 package com.skillswap.server.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CourseDTO {
 
     private int id;
@@ -21,6 +23,9 @@ public class CourseDTO {
     private double rating;
     private String status;
     private String bannerUrl;
+    private String achievements;
     private LocalDateTime createdAt;
     private UserDTO user;
+    private boolean isEnrolled;
+    private int totalEnrollments;
 }
