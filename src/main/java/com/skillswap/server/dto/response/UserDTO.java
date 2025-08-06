@@ -40,5 +40,6 @@ public class UserDTO {
     private int age;
     private String gender;
     private String birthday;
-    private List<ProfileImageDTO> profileImages;
+    private boolean isGoogleAuth;
+
 }

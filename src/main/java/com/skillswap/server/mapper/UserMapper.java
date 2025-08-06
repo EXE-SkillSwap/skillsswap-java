@@ -35,6 +35,7 @@ public class UserMapper {
         userDTO.setGender(user.getGender());
         userDTO.setAge(user.getAge());
         userDTO.setBirthday(user.getBirthday() != null ? user.getBirthday().toString() : null);
+        userDTO.setGoogleAuth(user.isGoogleAuth());
 
         return userDTO;
     }
