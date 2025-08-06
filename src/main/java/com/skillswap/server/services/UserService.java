@@ -4,8 +4,9 @@ import com.skillswap.server.dto.request.CreateUserRequest;
 import com.skillswap.server.dto.response.ProfileImageDTO;
 import com.skillswap.server.dto.response.UserDTO;
 import com.skillswap.server.entities.User;
+import com.skillswap.server.enums.Role;
 import org.springframework.data.domain.Page;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.domain.Sort;
 
 import java.io.IOException;
 import java.util.List;
@@ -23,7 +24,7 @@ public interface UserService {
 
     Page<UserDTO> getAllUsers(int page, int size);
 
-    Page<UserDTO> getAllUsersForAdmin(int page, int size);
+    Page<UserDTO> getAllUsersForAdmin(int page, int size, String searchString, Sort.Direction sortBy, Role role);
 
     String uploadProfileImages(List<ProfileImageDTO> dtos) throws IOException;
 

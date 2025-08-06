@@ -13,15 +13,17 @@ import com.skillswap.server.repositories.UserRepository;
 import com.skillswap.server.services.CloudinaryService;
 import com.skillswap.server.services.EmailService;
 import com.skillswap.server.services.UserService;
+import com.skillswap.server.specification.UserSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -137,8 +139,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserDTO> getAllUsersForAdmin(int page, int size) {
-        return null;
+    public Page<UserDTO> getAllUsersForAdmin(int page, int size, String searchString, Sort.Direction sortBy, Role role) {
+        Specification<User> spec = Specification
+                .allOf(UserSpecification.hasSearchString(searchString).and(UserSpecification.hasRole(role.name())));
+        Pageable pageable = PageRequest.of(page, size, sortBy, "firstName", "lastName");
+        Page<User> users = userRepository.findAll(spec, pageable);
+        return users.map(userMapper::userDTO);
     }
 
     @Override
