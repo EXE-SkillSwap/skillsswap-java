@@ -30,6 +30,6 @@ public class MembershipSubscriptionDTO {
     private PaymentStatus paymentStatus;
     private long orderCode;
     private boolean isUpdated = false;
-    private int userId;
+    private UserDTO userDTO;
     private MembershipDTO membership;
 }

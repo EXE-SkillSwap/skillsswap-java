@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,8 +41,14 @@ public class MembershipController {
     @Operation(summary = "Get all memberships for admin",
                description = "This endpoint retrieves all memberships. Only ADMIN can access this endpoint.")
     @GetMapping("/admin")
-    public ResponseEntity<List<Membership>> getAllMembershipsForAdmin() {
-        return new ResponseEntity<>(membershipService.getAllMembershipsForAdmin(), HttpStatus.OK);
+    public ResponseEntity<Page<Membership>> getAllMembershipsForAdmin(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "sort", defaultValue = "ASC") Sort.Direction sort,
+            @RequestParam(value = "searchString", required = false) String searchString,
+            @RequestParam(value = "isDeleted", defaultValue = "false") boolean isDeleted
+    ) {
+        return new ResponseEntity<>(membershipService.getAllMembershipsForAdmin(page, size, sort, searchString, isDeleted), HttpStatus.OK);
     }
 
     @Operation(summary = "Get all memberships",
@@ -79,6 +87,26 @@ public class MembershipController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getUserMembership() throws Exception {
         return ResponseEntity.ok(membershipService.getUserMembershipSubscription());
+    }
+
+    @DeleteMapping("/{membershipId}")
+    @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(summary = "Xóa membership",
+            description = "Chỉ ADMIN mới có thể xóa membership. " +
+                    "Yêu cầu ID của membership cần xóa.")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> deleteMembership(@PathVariable int membershipId) {
+        membershipService.deleteMembership(membershipId);
+        return ResponseEntity.ok("Xóa membership thành công");
+    }
+
+    @PutMapping("/{membershipId}")
+    @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(summary = "Cập nhật membership",
+            description = "Chỉ ADMIN mới có thể cập nhật membership. ")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<MembershipDTO> updateMembership(@PathVariable int membershipId, @Valid @RequestBody MembershipDTO dto) {
+        return new ResponseEntity<>(membershipService.updateMembership(membershipId, dto), HttpStatus.OK);
     }
 
 

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 public class MembershipSubscriptionMapper {
 
     private final MembershipMapper membershipMapper;
+    private final UserMapper userMapper;
 
     public MembershipSubscriptionDTO toMembershipSubscriptionDTO(com.skillswap.server.entities.MembershipSubscription membershipSubscription) {
         if (membershipSubscription == null) {
@@ -22,7 +23,7 @@ public class MembershipSubscriptionMapper {
         dto.setPaymentStatus(membershipSubscription.getPaymentStatus());
         dto.setOrderCode(membershipSubscription.getOrderCode());
         dto.setUpdated(membershipSubscription.isUpdated());
-        dto.setUserId(membershipSubscription.getUser().getId());
+        dto.setUserDTO(userMapper.userCourseDTO(membershipSubscription.getUser()));
         dto.setMembership(membershipMapper.toMembershipDTO(membershipSubscription.getMembership()));
 
         return dto;

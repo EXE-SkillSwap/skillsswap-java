@@ -14,9 +14,16 @@ import com.skillswap.server.repositories.MembershipRepository;
 import com.skillswap.server.repositories.MembershipSubscriptionRepository;
 import com.skillswap.server.services.MembershipService;
 import com.skillswap.server.services.UserService;
+import com.skillswap.server.specification.MembershipSpecification;
+import com.skillswap.server.specification.MembershipSubscriptionSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import vn.payos.PayOS;
@@ -186,8 +193,17 @@ public class MembershipServiceImpl implements MembershipService {
     }
 
     @Override
-    public List<Membership> getAllMembershipsForAdmin() {
-        return membershipRepository.findAll();
+    public Page<Membership> getAllMembershipsForAdmin(
+            int page,
+            int size,
+            Sort.Direction sort,
+            String searchString,
+            boolean status
+    ) {
+        Specification<Membership> spec = Specification.allOf(MembershipSpecification.hasSearchString(searchString).and(MembershipSpecification.hasStatus(status)));
+        Pageable pageable = PageRequest.of(page, size, sort, "createdAt");
+
+       return membershipRepository.findAll(spec, pageable);
     }
 
     @Override
@@ -204,5 +220,36 @@ public class MembershipServiceImpl implements MembershipService {
     public MembershipSubscription getValidMembershipSubscription(int userId) {
         return membershipSubscriptionRepository.findByUserIdAndStatus(userId, MembershipSubscriptionStatus.ACTIVE)
                 .orElse(null);
+    }
+
+    @Override
+    public void deleteMembership(int membershipId) {
+        Membership membership = membershipRepository.findById(membershipId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy membership với ID: " + membershipId));
+        membership.setDeleted(true);
+        membershipRepository.save(membership);
+    }
+
+    @Override
+    public MembershipDTO updateMembership(int membershipId, MembershipDTO membershipDTO) {
+        Membership membership = membershipRepository.findById(membershipId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy membership với ID: " + membershipId));
+        membership.setName(membershipDTO.getName());
+        membership.setDescription(membershipDTO.getDescription());
+        membership.setPrice(membershipDTO.getPrice());
+        membership.setDuration(membershipDTO.getDuration());
+        membership.setFeatures(membershipDTO.getFeatures());
+        Membership updatedMembership = membershipRepository.save(membership);
+        return membershipMapper.toMembershipDTO(updatedMembership);
+    }
+
+    @Override
+    public Page<MembershipSubscriptionDTO> getMembershipSubscriptions(int page, int size, Sort.Direction sort, MembershipSubscriptionStatus status, PaymentStatus paymentStatus) {
+        Pageable pageable = PageRequest.of(page, size, sort, "createdAt");
+        String statusString = status != null ? status.name() : "";
+        String paymentStatusString = paymentStatus != null ? paymentStatus.name() : "";
+        Specification<MembershipSubscription> spec = Specification.allOf(MembershipSubscriptionSpecification.hasStatus(statusString).and(MembershipSubscriptionSpecification.hasPaymentStatus(paymentStatusString)));
+        Page<MembershipSubscription> subscriptionPage = membershipSubscriptionRepository.findAll(spec, pageable);
+        return subscriptionPage.map(membershipSubscriptionMapper::toMembershipSubscriptionDTO);
     }
 }

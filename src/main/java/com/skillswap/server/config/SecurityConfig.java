@@ -37,6 +37,7 @@ public class SecurityConfig {
             Map.entry("/api/users/skill-tags", HttpMethod.POST),
             Map.entry("/api/memberships", HttpMethod.POST),
             Map.entry("/api/memberships", HttpMethod.GET),
+            Map.entry("/api/memberships/{membershipId}", HttpMethod.DELETE),
             Map.entry("/api/memberships/payment/**", HttpMethod.POST),
             Map.entry("/api/memberships/my", HttpMethod.GET),
             Map.entry("/api/users/update-profile", HttpMethod.PUT),
@@ -53,7 +54,8 @@ public class SecurityConfig {
             Map.entry("/api/courses/my-courses", HttpMethod.GET),
             Map.entry("/api/courses/approve/{courseId}", HttpMethod.PUT),
             Map.entry("/api/courses/reject", HttpMethod.PUT),
-            Map.entry("/api/feedbacks/send/{courseId}", HttpMethod.POST)
+            Map.entry("/api/feedbacks/send/{courseId}", HttpMethod.POST),
+            Map.entry("/api/membership-subscriptions/all", HttpMethod.GET)
     );
 
     @Bean
