@@ -50,3 +50,4 @@ jobs:
           echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
           docker-compose down || true
           docker-compose up -d --build
+          docker system prune -a --volumes -f
