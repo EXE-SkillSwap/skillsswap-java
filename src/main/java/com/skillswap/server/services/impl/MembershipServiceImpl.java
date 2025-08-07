@@ -244,11 +244,15 @@ public class MembershipServiceImpl implements MembershipService {
     }
 
     @Override
-    public Page<MembershipSubscriptionDTO> getMembershipSubscriptions(int page, int size, Sort.Direction sort, MembershipSubscriptionStatus status, PaymentStatus paymentStatus) {
+    public Page<MembershipSubscriptionDTO> getMembershipSubscriptions(int page, int size,String searchString, Sort.Direction sort, MembershipSubscriptionStatus status, PaymentStatus paymentStatus) {
         Pageable pageable = PageRequest.of(page, size, sort, "createdAt");
         String statusString = status != null ? status.name() : "";
         String paymentStatusString = paymentStatus != null ? paymentStatus.name() : "";
-        Specification<MembershipSubscription> spec = Specification.allOf(MembershipSubscriptionSpecification.hasStatus(statusString).and(MembershipSubscriptionSpecification.hasPaymentStatus(paymentStatusString)));
+        Long orderCode = searchString != null && !searchString.isEmpty() ? Long.parseLong(searchString) : null;
+        Specification<MembershipSubscription> spec = Specification.allOf(
+                MembershipSubscriptionSpecification.hasStatus(statusString)
+                        .and(MembershipSubscriptionSpecification.hasPaymentStatus(paymentStatusString))
+                        .and(MembershipSubscriptionSpecification.hasSearchString(orderCode)));
         Page<MembershipSubscription> subscriptionPage = membershipSubscriptionRepository.findAll(spec, pageable);
         return subscriptionPage.map(membershipSubscriptionMapper::toMembershipSubscriptionDTO);
     }

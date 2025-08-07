@@ -44,6 +44,7 @@ public interface MembershipService {
     Page<MembershipSubscriptionDTO> getMembershipSubscriptions(
             int page,
             int size,
+            String searchString,
             Sort.Direction sort,
             MembershipSubscriptionStatus status,
             PaymentStatus paymentStatus

@@ -28,10 +28,11 @@ public class MembershipSubscriptionController {
     public ResponseEntity<?> getAllMembershipSubscriptions(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "searchString", required = false) String searchString,
             @RequestParam(value = "sort", defaultValue = "ASC") Sort.Direction sort,
             @RequestParam(value = "status", required = false) MembershipSubscriptionStatus status,
             @RequestParam(value = "paymentStatus", required = false) PaymentStatus paymentStatus
     ) {
-        return ResponseEntity.ok(membershipService.getMembershipSubscriptions(page, size, sort, status, paymentStatus));
+        return ResponseEntity.ok(membershipService.getMembershipSubscriptions(page, size,searchString, sort, status, paymentStatus));
     }
 }

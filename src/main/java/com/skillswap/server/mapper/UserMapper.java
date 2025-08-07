@@ -66,4 +66,18 @@ public class UserMapper {
         userDTO.setAvatarUrl(user.getAvatarUrl());
         return userDTO;
     }
+
+    public UserDTO userPostDTO(User user) {
+        if (user == null) {
+            return null;
+        }
+
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setFirstName(user.getFirstName());
+        userDTO.setLastName(user.getLastName());
+        userDTO.setUsername(user.getUsername());
+        userDTO.setAvatarUrl(user.getAvatarUrl());
+        return userDTO;
+    }
 }
