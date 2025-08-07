@@ -10,9 +10,11 @@ import java.util.List;
 
 public interface CoursesService {
 
-    List<CourseDTO> createCourses(List<CourseCreateRequest> requests);
+    CourseDTO createCourses(CourseCreateRequest requests);
 
     Page<CourseDTO> getCoursesByCurrentUser(int page, int size);
+
+    Page<CourseDTO> getAttendedCoursesByCurrentUser(int page, int size);
 
     CourseDTO getCourseById(int id);
 
@@ -21,4 +23,6 @@ public interface CoursesService {
     CourseDTO approveCourse(int courseId);
 
     CourseDTO rejectCourse(int courseId, String reason);
+
+    Page<CourseDTO> getBestCourses(int page, int size);
 }

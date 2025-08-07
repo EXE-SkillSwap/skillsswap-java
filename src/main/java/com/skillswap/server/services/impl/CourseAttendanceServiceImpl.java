@@ -1,17 +1,23 @@
 package com.skillswap.server.services.impl;
 
 import com.skillswap.server.dto.response.CourseAttendanceDTO;
+import com.skillswap.server.dto.response.UserDTO;
 import com.skillswap.server.entities.CourseAttendance;
 import com.skillswap.server.entities.Courses;
 import com.skillswap.server.entities.User;
 import com.skillswap.server.enums.CourseAttendanceStatus;
 import com.skillswap.server.enums.CourseStatus;
 import com.skillswap.server.mapper.CourseAttendanceMapper;
+import com.skillswap.server.mapper.UserMapper;
 import com.skillswap.server.repositories.CourseAttendanceRepository;
 import com.skillswap.server.repositories.CoursesRepository;
 import com.skillswap.server.services.CourseAttendanceService;
+import com.skillswap.server.services.NotificationService;
 import com.skillswap.server.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,6 +28,8 @@ public class CourseAttendanceServiceImpl implements CourseAttendanceService {
     private final UserService userService;
     private final CoursesRepository coursesRepository;
     private final CourseAttendanceMapper courseAttendanceMapper;
+    private final NotificationService notificationService;
+    private final UserMapper userMapper;
 
     @Override
     public CourseAttendanceDTO enrollCourse(int courseId) {
@@ -45,5 +53,15 @@ public class CourseAttendanceServiceImpl implements CourseAttendanceService {
         newAttendance = courseAttendanceRepository.save(newAttendance);
 
         return courseAttendanceMapper.toCourseAttendanceDTO(newAttendance);
+    }
+
+    @Override
+    public Page<UserDTO> getAttendeesByCourseId(int courseId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<CourseAttendance> courseAttendances = courseAttendanceRepository.findByCourseId(courseId, pageable);
+        return courseAttendances.map(courseAttendance -> {
+            User user = courseAttendance.getUser();
+            return userMapper.userCourseDTO(user);
+        });
     }
 }

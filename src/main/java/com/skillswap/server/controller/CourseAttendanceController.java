@@ -5,10 +5,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,4 +25,18 @@ public class CourseAttendanceController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @GetMapping("/attendees/{courseId}")
+    @Operation(summary = "Lấy danh sách người dùng đã tham gia khóa học",
+               description = "Người dùng phải đăng nhập để xem danh sách người dùng đã tham gia khóa học")
+    public ResponseEntity<?> getAttendees(@PathVariable int courseId,
+                                          @RequestParam(value = "page", defaultValue = "0") int page,
+                                          @RequestParam(value = "size", defaultValue = "10") int size){
+        try {
+            return ResponseEntity.ok(courseAttendanceService.getAttendeesByCourseId(courseId, 0, 10));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 }

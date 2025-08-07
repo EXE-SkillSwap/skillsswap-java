@@ -13,8 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/courses")
@@ -24,9 +22,9 @@ public class CoursesController {
 
     @PostMapping
     @SecurityRequirement(name = "Bearer Authentication")
-    public ResponseEntity<?> createCourses(@RequestBody List<CourseCreateRequest> requests) {
-        List<CourseDTO> courseDTOs = coursesService.createCourses(requests);
-        return ResponseEntity.ok(courseDTOs);
+    public ResponseEntity<?> createCourses(@RequestBody CourseCreateRequest requests) {
+        CourseDTO courseDTO = coursesService.createCourses(requests);
+        return ResponseEntity.ok(courseDTO);
     }
 
     @GetMapping("/my-courses")
@@ -38,6 +36,17 @@ public class CoursesController {
             @RequestParam(defaultValue = "10") int size
     ) {
         return ResponseEntity.ok(coursesService.getCoursesByCurrentUser(page, size));
+    }
+
+    @GetMapping("/attended-courses")
+    @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(summary = "Lây danh sách khóa học của người dùng hiện tại đã tham gia",
+            description = "Lấy danh sách khóa học đã tham gia của người dùng hiện tại với phân trang")
+    public ResponseEntity<?> getAttendedCoursesByCurrentUser(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return ResponseEntity.ok(coursesService.getAttendedCoursesByCurrentUser(page, size));
     }
 
     @GetMapping("/{courseId}")
@@ -77,5 +86,14 @@ public class CoursesController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> rejectCourse(@RequestBody RejectCourseRequest request) {
         return ResponseEntity.ok(coursesService.rejectCourse(request.getCourseId(), request.getReason()));
+    }
+
+    @GetMapping("/best-courses")
+    @Operation(summary = "Lấy danh sách khóa học tốt nhất",
+            description = "Lấy danh sách các khóa học tốt nhất với phân trang")
+    public ResponseEntity<?> getBestCourses(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size){
+        return ResponseEntity.ok(coursesService.getBestCourses(page, size));
     }
 }

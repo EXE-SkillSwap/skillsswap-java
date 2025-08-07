@@ -2,6 +2,7 @@ package com.skillswap.server.repositories;
 
 import com.skillswap.server.entities.MembershipSubscription;
 import com.skillswap.server.enums.MembershipSubscriptionStatus;
+import com.skillswap.server.enums.PaymentStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -23,4 +24,6 @@ public interface MembershipSubscriptionRepository extends JpaRepository<Membersh
     Optional<MembershipSubscription> findByUserIdAndMembershipIdAndStatus(int userId, int membershipId, MembershipSubscriptionStatus status);
 
     Page<MembershipSubscription> findAll(Specification<MembershipSubscription> specification, Pageable pageable);
+
+    List<MembershipSubscription> findByPaymentStatus(PaymentStatus status);
 }

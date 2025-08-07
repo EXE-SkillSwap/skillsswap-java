@@ -3,6 +3,7 @@ package com.skillswap.server.services.impl;
 import com.skillswap.server.dto.request.CourseCreateRequest;
 import com.skillswap.server.dto.request.NotificationRequest;
 import com.skillswap.server.dto.response.CourseDTO;
+import com.skillswap.server.entities.CourseAttendance;
 import com.skillswap.server.entities.Courses;
 import com.skillswap.server.entities.MembershipSubscription;
 import com.skillswap.server.entities.User;
@@ -39,14 +40,13 @@ public class CoursesServiceImpl implements CoursesService {
     private final CourseAttendanceRepository courseAttendanceRepository;
 
     @Override
-    public List<CourseDTO> createCourses(List<CourseCreateRequest> requests) {
+    public CourseDTO createCourses(CourseCreateRequest request) {
         User user = userService.getAuthenticatedUser();
         MembershipSubscription validSubscription = membershipService.getValidMembershipSubscription(user.getId());
         if(validSubscription == null){
             throw new NotMembershipException("Bạn chưa có gói membership hợp lệ để tạo khóa học");
         }
-        List<Courses> coursesList = new ArrayList<>();
-        for(CourseCreateRequest request : requests){
+
             Courses courses = new Courses();
             courses.setCourseName(request.getCourseName());
             courses.setDescription(request.getDescription());
@@ -57,8 +57,7 @@ public class CoursesServiceImpl implements CoursesService {
             courses.setUser(user);
             courses.setAchievements(request.getAchievements());
             courses = coursesRepository.save(courses);
-            coursesList.add(courses);
-        }
+
         NotificationRequest notificationRequest = new NotificationRequest();
         notificationRequest.setTitle("Khóa học mới đã được tạo");
         notificationRequest.setContent("Bạn đã tạo thành công khóa học mới. Chúng tôi sẽ xem xét và phê duyệt trong thời gian sớm nhất.");
@@ -67,7 +66,7 @@ public class CoursesServiceImpl implements CoursesService {
 
         notificationService.sendNotification(notificationRequest);
 
-        return coursesList.stream().map(courseMapper::toCourseDTO).toList();
+        return courseMapper.toCourseDTO(courses);
     }
 
     @Override
@@ -127,5 +126,23 @@ public class CoursesServiceImpl implements CoursesService {
         notificationRequest.setUserId(course.getUser().getId());
         notificationService.sendNotification(notificationRequest);
         return courseMapper.toCourseDTO(course);
+    }
+
+    @Override
+    public Page<CourseDTO> getAttendedCoursesByCurrentUser(int page, int size) {
+        User user = userService.getAuthenticatedUser();
+        Pageable pageable = PageRequest.of(page, size);
+        Page<CourseAttendance> attendancePage = courseAttendanceRepository.findByUserId(user.getId(), pageable);
+        return attendancePage.map(attendance -> {;
+            Courses course = attendance.getCourse();
+            return courseMapper.toCourseDTO(course);
+        });
+    }
+
+    @Override
+    public Page<CourseDTO> getBestCourses(int page, int size) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "rating"));
+    Page<Courses> bestCourses = coursesRepository.findAll(pageable);
+        return bestCourses.map(courseMapper::toCourseDTO);
     }
 }
