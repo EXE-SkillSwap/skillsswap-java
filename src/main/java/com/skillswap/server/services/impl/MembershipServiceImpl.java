@@ -211,6 +211,7 @@ public class MembershipServiceImpl implements MembershipService {
         MembershipSubscription subscription = membershipSubscriptionRepository.findByOrderCode(orderCode)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hàng với mã: " + orderCode));
         subscription.setPaymentStatus(PaymentStatus.CANCELLED);
+        subscription.setStatus(MembershipSubscriptionStatus.INACTIVE);
         membershipSubscriptionRepository.save(subscription);
         return payOS.cancelPaymentLink(orderCode, "Hủy đơn hàng với mã: " + orderCode);
 
