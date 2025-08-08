@@ -32,6 +32,7 @@ public class NotificationServiceImpl implements NotificationService {
         notification.setContent(request.getContent());
         notification.setUrl(request.getUrl());
         notification.setUser(userService.getUserById(request.getUserId()));
+        notification.setType(request.getType());
 
         Notification savedNotification = notificationRepository.save(notification);
 

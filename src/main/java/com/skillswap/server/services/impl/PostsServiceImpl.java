@@ -46,7 +46,24 @@ public class PostsServiceImpl implements PostsService {
             int commentCount = commentRepository.countByPostId(posts.getId());
             int likeCount = likeRepository.countByPostId(posts.getId());
 
-            return postMapper.toPostDTO(posts, isLike, commentCount, likeCount);
+            return postMapper.toPostDTO(posts, isLike, likeCount, commentCount);
         });
+    }
+
+    @Override
+    public PostDTO getPostById(int postId) {
+    User currentUser = userService.getAuthenticatedUser();
+        Posts post = postsRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+        boolean isLike = likeRepository.existsByUserIdAndPostId(currentUser.getId(), post.getId());
+        int commentCount = commentRepository.countByPostId(post.getId());
+        int likeCount = likeRepository.countByPostId(post.getId());
+        return postMapper.toPostDTO(post, isLike, likeCount, commentCount);
+    }
+
+    @Override
+    public Posts getPostEntityById(int id) {
+    return postsRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Post not found"));
     }
 }

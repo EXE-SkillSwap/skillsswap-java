@@ -1,5 +1,6 @@
 package com.skillswap.server.dto.request;
 
+import com.skillswap.server.enums.NotificationType;
 import lombok.*;
 
 @AllArgsConstructor
@@ -12,4 +13,5 @@ public class NotificationRequest {
     private String content;
     private int userId;
     private String url;
+    private NotificationType type;
 }

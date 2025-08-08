@@ -1,5 +1,6 @@
 package com.skillswap.server.entities;
 
+import com.skillswap.server.enums.NotificationType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,6 +26,8 @@ public class Notification {
     @Column(columnDefinition = "TEXT")
     private String content;
     private String url;
+    @Enumerated(EnumType.STRING)
+    private NotificationType type;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp

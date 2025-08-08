@@ -1,7 +1,6 @@
 package com.skillswap.server.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.skillswap.server.enums.NotificationType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,14 +12,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
-public class NotificationDTO {
+public class CommentDTO {
 
     private int id;
-    private String title;
     private String content;
-    private String url;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
     private LocalDateTime createdAt;
-    private boolean isRead;
-    private NotificationType type;
+    private UserDTO user;
 }

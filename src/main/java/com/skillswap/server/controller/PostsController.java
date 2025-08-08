@@ -31,4 +31,11 @@ public class PostsController {
             @RequestParam(defaultValue = "10") int size) {
         return new ResponseEntity<>(postsService.getPosts(page, size), HttpStatus.OK);
     }
+
+    @GetMapping("/{postId}")
+    @Operation(summary = "Lấy bài viết theo ID")
+    @SecurityRequirement(name = "Bearer Authentication")
+    public ResponseEntity<?> getPostById(@PathVariable int postId) {
+        return new ResponseEntity<>(postsService.getPostById(postId), HttpStatus.OK);
+    }
 }

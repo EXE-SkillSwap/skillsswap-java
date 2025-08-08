@@ -19,6 +19,7 @@ public class NotificationMapper {
         notificationDTO.setCreatedAt(notification.getCreatedAt());
         notificationDTO.setUrl(notification.getUrl());
         notificationDTO.setRead(notification.isRead());
+        notificationDTO.setType(notification.getType());
 
         return notificationDTO;
 
