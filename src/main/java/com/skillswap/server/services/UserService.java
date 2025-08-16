@@ -31,4 +31,6 @@ public interface UserService {
     List<ProfileImageDTO> getProfileImagesByUserId(int userId);
 
     User getUserById(int userId);
+
+    UserDTO getUserByUsername(String username);
 }

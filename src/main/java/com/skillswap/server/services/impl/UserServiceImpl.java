@@ -175,4 +175,10 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(userId).orElseThrow(() ->
                 new RuntimeException("Người dùng không tồn tại"));
     }
+
+    @Override
+    public UserDTO getUserByUsername(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
+        return userMapper.userDTO(user);
+    }
 }

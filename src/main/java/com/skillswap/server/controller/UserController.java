@@ -89,4 +89,10 @@ public class UserController {
         return ResponseEntity.ok(userService.getProfileImagesByUserId(userId));
     }
 
+    @GetMapping("/nickname/{username}")
+    @Operation(summary = "Lấy người dùng theo username của họ")
+    public ResponseEntity<?> getUserByUsername(@PathVariable String username){
+        return ResponseEntity.ok(userService.getUserByUsername(username));
+    }
+
 }
